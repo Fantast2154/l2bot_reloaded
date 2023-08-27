@@ -1,4 +1,4 @@
 # Python version 3.11.5
 # developers:
-# Baganec
-# Germanec
+# 1) Baganec
+# 2) Germanec
