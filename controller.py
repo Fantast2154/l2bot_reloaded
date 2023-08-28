@@ -2,28 +2,66 @@ import random
 import threading
 import time
 from multiprocessing import Process
-from user_props import PersonalSettings
+from view.view import View
+from user_props.personal_settings import PersonalSettings
+from system.model import Model
+from system.relaunch import RelaunchModule
+from system.server import Server
+from system.queue import ActionQueue
+from system.l2window_manager import L2WindowManager
+from system.wincap import WindowCapture
+
+from bots.farmer.farming_service import FarmingService
+
 class Controller:
     def send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
 
-    def __int__(self):
+    def __init__(self):
         '''
         The core of the program and main loop.
         :return:
         '''
         self.send_message('has been created')
-        self.personal_settings = PersonalSettings()
-        self.view = View(self)
-        self.model_database = Model(self)
-        self.relaunch_module = RelaunchModule(self)
-        self.server = Server(self)
-        self.l2win_manager = L2WindowManager()
-        self.q = ActionQueue()
-        self.wincap = WindowCapture(self.personal_settings.l2window_name)
+        self.__personal_settings = PersonalSettings()
+        self.__view = View(self)
+        self.__model = Model(self)
+        self.__relaunch_module = RelaunchModule()
+        self.__server = Server(self)
+        self.__l2win_manager = L2WindowManager(self)
+        self.__q = ActionQueue()
+        self.__wincap = WindowCapture(self.__personal_settings.l2window_name)
 
-        self.start_q()
+        self._init_controller()
+
         self._run()
+
+    def _init_controller(self):
+        self.start_q()
+
+    def personal_settins(self):
+        return self.__personal_settings
+
+    def view(self):
+        return self.__view
+
+    def model(self):
+        return self.__model
+
+    def relaunch_module(self):
+        return self.__relaunch_module
+
+    def server(self):
+        return self.__server
+
+    def l2win_manager(self):
+        return self.__l2win_manager
+
+    def queue(self):
+        return self.__q
+
+    def wincap(self):
+        return self.__wincap
 
     def create_fishing_service(self):
         pass
@@ -32,7 +70,7 @@ class Controller:
         pass
 
     def create_farming_service(self):
-        pass
+        farming_service = FarmingService()
 
     def stop_farming_service(self):
         pass
@@ -53,14 +91,15 @@ class Controller:
         pass
 
     def stop_server(self):
-        if self.server.is_running():
-            self.server.stop()
+        if self.__server.is_running():
+            self.__server.stop()
 
     def is_running(self):
         return self.is_running
 
     def _run(self):
         self.send_message('starts')
+        self.create_farming_service()  # test
         self.is_running = True
         # loop
         self.is_running = False
