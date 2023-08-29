@@ -8,6 +8,7 @@ class FarmerDD(Bot):
         self.id = id
         self.send_message('has been created')
         self.exit_is_set = False
+        self.kill_count = 0
 
     def start(self):
         self.send_message('started')
@@ -24,6 +25,7 @@ class FarmerDD(Bot):
                 while self.target_is_alive():
                     self.attack()
                     self.chek_hp()
+                self.inc_counter()
                 self.loot_target()
 
     def loot_target(self):
@@ -41,7 +43,19 @@ class FarmerDD(Bot):
     def start_fight(self):
         pass
 
-    def is_target(self):
+    def is_target(self) -> bool:
+        self.click_find_mob()
+        if self.chek_mob():
+            return True
+        return False
+
+    def inc_counter(self):
+        self.kill_count += 1
+
+    def chek_mob(self) -> bool:
+        return self.farming_window.is_mob()
+
+    def click_find_mob(self):
         pass
 
 
