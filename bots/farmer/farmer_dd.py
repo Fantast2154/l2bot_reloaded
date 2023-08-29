@@ -7,10 +7,41 @@ class FarmerDD(Bot):
     def __init__(self, id):
         self.id = id
         self.send_message('has been created')
+        self.exit_is_set = False
 
     def start(self):
         self.send_message('started')
+        self._run()
 
     def stop(self):
         self.send_message('stopped')
+
+    def _run(self):
+        self.send_message('разминаю пальчики')
+        while not self.exit_is_set:
+            if self.is_target():
+                self.start_fight()
+                while self.target_is_alive():
+                    self.attack()
+                    self.chek_hp()
+                self.loot_target()
+
+    def loot_target(self):
+        pass
+
+    def chek_hp(self):
+        pass
+
+    def attack(self):
+        pass
+
+    def target_is_alive(self):
+        pass
+
+    def start_fight(self):
+        pass
+
+    def is_target(self):
+        pass
+
 
