@@ -1,31 +1,21 @@
-import win32gui
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
-import ctypes
 
 
 class WindowUI(object):
     def __init__(self, MainWindow, controller):
         self.send_message('created')
-        self.window_name = 'baganec & germanec'
         self.main_window = MainWindow
         self.controller = controller
 
         self.bot_box_groups = []
-
-        self.left_top_x = None
-        self.left_top_y = None
-        self.hwnd = None
 
         self._translate = QtCore.QCoreApplication.translate
         self.setup_ui(MainWindow)
 
     def setup_ui(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        self.width = 558
-        self.height = 194
-        MainWindow.setFixedSize(self.width, self.height)
-
+        MainWindow.setFixedSize(558, 194)
         MainWindow.setWindowIcon(QtGui.QIcon("gui/icons/header_icon380x380.png"))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -41,7 +31,6 @@ class WindowUI(object):
         self.db_status_label = QtWidgets.QLabel(self.frame)
         self.db_status_label.setEnabled(False)
         self.db_status_label.setGeometry(QtCore.QRect(22, 18, 47, 13))
-
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 131, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -79,13 +68,10 @@ class WindowUI(object):
         brush = QtGui.QBrush(QtGui.QColor(194, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-
         self.db_status_label.setPalette(palette)
-
         font = QtGui.QFont()
         font.setBold(False)
         font.setWeight(50)
-
         self.db_status_label.setFont(font)
         self.db_status_label.setAlignment(QtCore.Qt.AlignCenter)
         self.db_status_label.setObjectName("db_status_label")
@@ -162,9 +148,6 @@ class WindowUI(object):
 
         self.retranslate_ui(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.connect_funcs_with_buttons()
-        self.setup_db_status_frame()
-        self.setup_db_status_group()
 
     def add_new_bot_button(self):
         self.addBotButton = QtWidgets.QPushButton(self.horizontalLayoutWidget_2)
@@ -195,7 +178,6 @@ class WindowUI(object):
 
     def add_bot_group_box(self, horizontal_layout_widget, internal_horizontal_layout):
         a = AddBotLayout(horizontal_layout_widget, internal_horizontal_layout)
-        a.connect_methods_with_buttons(self.start_bot_click_event, self.stop_bot_click_event)
         self.bot_box_groups.append(a)
 
     def add_bot_group_box_click(self, horizontal_layout_widget, internal_horizontal_layout):
@@ -319,53 +301,35 @@ class WindowUI(object):
         self.db_status_label.setAlignment(QtCore.Qt.AlignCenter)
         self.db_status_label.setObjectName("db_status_label")
 
-    def connect_funcs_with_buttons(self):
-        self.actionPrivet.triggered.connect(lambda: self.db_status_update_button())
-        self.actionExit.triggered.connect(lambda: self.exit_app())
 
-        self.actionContact_Baganec.triggered.connect(lambda: self.contact_baganec())
-        self.actionContact_Germanec.triggered.connect(lambda: self.contact_germanec())
-        self.actionAbout.triggered.connect(lambda: self.about())
+    def connect_funcs_with_buttons(self):
+
+        self.actionPrivet.triggered.connect(self.db_status_update_button)
+        self.actionExit.triggered.connect(self.exit_app)
+
+        self.actionContact_Baganec.triggered.connect(lambda: self.contact_baganec)
+        self.actionContact_Germanec.triggered.connect(lambda: self.contact_germanec)
+        self.actionAbout.triggered.connect(lambda: self.about)
 
     def contact_baganec(self):
-        print('''
-              Не беспокойтесь, пред Баганским Владыкой сего мира, времени и всего бытия, как и у ваших предков, 
-              братьев и сестер, ваша жизнь не более ничтожна, чем жизнь любого живого существа на этой планете и 
-              очень скоро ты убедишься в этом сам. Единственный скоро посетит вашу плоскость бытия, вот только ты 
-              будешь не слишком то этому рад.
-              ''')
+        pass
 
     def contact_germanec(self):
-        print('''
-              Посмотрим, как ты устоишь, когда я буду покусывать твои губки.. Буду держать тебя за волосы,  
-              гладить твою спину, целуя твою шею.  Потом буду передвигаться языком к плечиками, мои руки опустятся 
-              ниже под твои джинсы, буду крепко держать тебя за попу и прижимать к себе. Будешь извиваться в моих 
-              руках, я опущусь ниже к твоей груди и буду кусать тебя за сосочки, не давая вырваться когда я 
-              почувствую, как ты дышишь и выгибаешься ко мне, я бы стоял сзади, целуя тебя в шею. Потом расстегнул 
-              бы твои джинсы, крепко прижимал тебя к себе. Вторая рука опускалась бы ниже по животу, 
-              потом ещё ниже.. гладил бы твои ножки.. моя рука скользила бы по твоим трусикам... иногда я бы нарушал 
-              границы 😋 чтобы чувствовать как ты возбуждена.. какая ты мокренькая в моих руках
-              ''')
+        pass
 
     def about(self):
-        print('''
-              Бот без нормального ГУИ, базы данных, с кривонаписанным классами.. отрефакторить бы всё, 
-              написать нормально сетевую часть И НА хотспрингс отправить. И ОН СТАНЕТ БОТОМ. ПРИ ЧЕМ БОТОМ БУДЕТ 
-              АХУЕННЫМ. ПРАВИЛЬНО?
-              ''')
+        pass
 
     def exit_app(self):
         pass
 
-    def start_bot_click_event(self):
-        self.send_message("START BOT")
-        # self.controller.start_bot()
+    def shefer1_click_event(self):
+        self.controller.start_bot()
 
-    def stop_bot_click_event(self):
-        self.send_message("STOP BOT")
-        # self.controller.stop_bot()
+    def shefer2_click_event(self, argument):
+        self.controller.stop_bot()
 
-    def windows_click_event(self):
+    def shefer3_click_event(self, argument1, argument2):
         self.controller.windows()
 
     def clicked(self, text):
@@ -383,14 +347,10 @@ class WindowUI(object):
             self.db_status_icon.setPixmap(QtGui.QPixmap("gui/icons/offline380x380.png"))
 
     def db_status_update_button(self):
-        print('''
-        — Давай базу данных.
-        ...ты ебанулся? Какая база? Она померла уже 8 раз. И на поминках плясали, сука
-        ''')
-        # self.controller.call_test_func(1)
+        self.controller.call_test_func(1)
 
     def retranslate_ui(self, MainWindow):
-        MainWindow.setWindowTitle(self._translate("MainWindow", self.window_name))
+        MainWindow.setWindowTitle(self._translate("MainWindow", "EBVDAS software"))
         self.db_status_label.setText(self._translate("MainWindow", "Offline"))
 
         self.retranslate_ui_boxes(self._translate)
@@ -401,8 +361,8 @@ class WindowUI(object):
         self.actionPrivet.setText(self._translate("MainWindow", "Privet😂"))
         self.actionPrivet.setStatusTip(self._translate("MainWindow", "Бесполезная кнопка"))
         self.action_5.setText(self._translate("MainWindow", "😂"))
-        self.actionContact_Baganec.setText(self._translate("MainWindow", "Contact Baganec!!!"))
-        self.actionContact_Germanec.setText(self._translate("MainWindow", "Contact Germanec!!!"))
+        self.actionContact_Baganec.setText(self._translate("MainWindow", "Contact Baganec"))
+        self.actionContact_Germanec.setText(self._translate("MainWindow", "Contact Germanec"))
         self.actionAbout.setText(self._translate("MainWindow", "About!"))
         self.actionAbout.setStatusTip(self._translate("MainWindow", "О двух физиках, которым было лень рыбачить "
                                                                     "самим..."))
@@ -427,56 +387,10 @@ class WindowUI(object):
             b.isTrader.setText(_translate("MainWindow", "Trader"))
             b.accountsList.setItemText(0, _translate("MainWindow", "BaganskySilach"))
             b.accountsList.setItemText(1, _translate("MainWindow", "PortovayaShhuna"))
-            b.accountsList.setItemText(2, _translate("MainWindow", "Podskarbiy"))
-
-    def get_roles_list(self):
-        return ['broker']
 
     def send_message(self, message):
         temp = 'View' + ': ' + message
         print(temp)
-
-    # def set_gui_position(self, l2_window_x, l2_window_y, l2_window_width, l2_window_height):
-    #     self.left_top_x = l2_window_x
-    #     self.left_top_y = l2_window_y + l2_window_height + 5
-    #     name, hwnd = self._get_gui_window_param()
-    #     self.enum_handler(hwnd)
-    #     self.hwnd = hwnd
-
-    def set_gui_position(self):
-        user32 = ctypes.windll.user32
-        screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-
-        self.left_top_x = screensize[0] // 2
-        self.left_top_y = screensize[1] * 2 // 3
-        name, hwnd = self._get_gui_window_param()
-        self.enum_handler(hwnd)
-        self.hwnd = hwnd
-
-    def _get_gui_window_param(self):
-        hwnd = None
-        name = None
-        for window in self._list_window_names():
-            if window[1] == self.window_name:
-                name = window[1]
-                hwnd = window[0]
-        return name, hwnd
-
-    def _list_window_names(self):
-        temp = []
-
-        def win_enum_handler(hwnd, ctx):
-            if win32gui.IsWindowVisible(hwnd):
-                temp.append([hwnd, win32gui.GetWindowText(hwnd)])
-
-        win32gui.EnumWindows(win_enum_handler, None)
-        windows_param = temp
-        return windows_param
-
-    def enum_handler(self, hwnd):
-        if win32gui.IsWindowVisible(hwnd):
-            if self.window_name in win32gui.GetWindowText(hwnd):
-                win32gui.MoveWindow(hwnd, self.left_top_x, self.left_top_y, self.width, self.height, True)
 
 
 class AddBotLayout:
@@ -518,31 +432,15 @@ class AddBotLayout:
         self.accountsList.setObjectName("accountsList")
         self.accountsList.addItem("")
         self.accountsList.addItem("")
-        self.accountsList.addItem("")
 
         internal_horizontal_layout.addWidget(self.botGroupBox)
 
-    def connect_methods_with_buttons(self, start_method, stop_method):
-        self.startBotButton.clicked.connect(start_method)
-        self.stopBotButton.clicked.connect(stop_method)
 
-
-class View(WindowUI):
-    def send_message(self, message):
-        print(str(self.__class__.__name__) + ': ' + str(message))
-
+class ViewTest(WindowUI):
     def __init__(self, controller):
         self.app = QtWidgets.QApplication(sys.argv)
         self.MainWindow = QtWidgets.QMainWindow()
         self.controller = controller
 
-        super(View, self).__init__(self.MainWindow, self.controller)
+        super(ViewTest, self).__init__(self.MainWindow, self.controller)
         self.MainWindow.show()
-        self.set_gui_position()
-
-        self.send_message('has been created')
-
-
-if __name__ == '__main__':
-    view = View(None)
-    view.app.exec_()
