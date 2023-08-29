@@ -45,15 +45,15 @@ class FarmerDD(Bot):
 
     def is_target(self) -> bool:
         self.click_find_mob()
-        if self.chek_mob():
-            return True
+        # if self.chek_mob():
+        #     return True
         return False
 
     def inc_counter(self):
         self.kill_count += 1
 
-    def chek_mob(self) -> bool:
-        return self.farming_window.is_mob()
+    # def chek_mob(self) -> bool:
+    #     return self.farming_window.is_mob()
 
     def click_find_mob(self):
         pass

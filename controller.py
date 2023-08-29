@@ -15,6 +15,15 @@ from bots.farmer.farming_service import FarmingService
 
 
 class Controller:
+    q = None
+    personal_settings = None
+    view = None
+    model = None
+    relaunch_module = None
+    server = None
+    l2win_manager = None
+    wincap = None
+
     def send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
 
@@ -24,46 +33,21 @@ class Controller:
         :return:
         '''
         self.send_message('has been created')
-        self.__personal_settings = PersonalSettings()
-        self.__view = View(self)
-        self.__model = Model(self)
-        self.__relaunch_module = RelaunchModule()
-        self.__server = Server(self)
-        self.__l2win_manager = L2WindowManager(self)
-        self.__q = ActionQueue()
-        self.__wincap = WindowCapture(self.__personal_settings.l2window_name)
+        self.q = ActionQueue()
+        self.personal_settings = PersonalSettings()
+        self.view = View(self)
+        self.model = Model(self)
+        self.relaunch_module = RelaunchModule()
+        self.server = Server(self)
+        self.l2win_manager = L2WindowManager(self)
+        self.wincap = WindowCapture(self._personal_settings.l2window_name)
 
         self._init_controller()
-
         self._start_controller_thread()
         self._start_gui()
 
     def _init_controller(self):
         self.start_q()
-
-    def personal_settins(self):
-        return self.__personal_settings
-
-    def view(self):
-        return self.__view
-
-    def model(self):
-        return self.__model
-
-    def relaunch_module(self):
-        return self.__relaunch_module
-
-    def server(self):
-        return self.__server
-
-    def l2win_manager(self):
-        return self.__l2win_manager
-
-    def queue(self):
-        return self.__q
-
-    def wincap(self):
-        return self.__wincap
 
     def create_fishing_service(self):
         pass
