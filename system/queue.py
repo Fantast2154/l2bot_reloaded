@@ -1,5 +1,7 @@
 from time import sleep
 from multiprocessing import Manager
+
+from mathematics.vectors import Vector2i
 from system.task import MouseTask, KeyboardTask, ClickType
 from system.action_service import Mouse, Keyboard
 
@@ -31,17 +33,11 @@ class ActionQueue:
         self.queue_list.append(1)
         self.tasks.append(pending_task)
 
-    def coords_local_to_global(self, coordinates, window) -> tuple:
-
+    def coords_local_to_global(self, coordinates: Vector2i, window) -> Vector2i:
         deltaX = window.wincap.offset_x[window.window_id]
         deltaY = window.wincap.offset_y[window.window_id]
 
-        [(x_temp, y_temp)] = coordinates
-
-        x = x_temp + deltaX
-        y = y_temp + deltaY
-
-        return x, y
+        return coordinates + Vector2i(deltaX, deltaY)
 
     def task_execution(self, task: MouseTask | KeyboardTask):
         """
@@ -50,24 +46,24 @@ class ActionQueue:
         """
 
         if task is MouseTask:
-            (x, y) = self.coords_local_to_global(task.coordinates, task.window)
+            position = self.coords_local_to_global(task.click_position, task.window)
 
             if task.window.hwnd != self.last_active_window:
                 self.last_active_window = task.window.hwnd
-                Mouse.activate_window(x, y)
+                Mouse.activate_window(position)
 
             if task.click_type == ClickType.LEFT:
-                Mouse.click_left(x, y)
+                Mouse.click_left(position)
             elif task.click_type == ClickType.RIGHT:
-                Mouse.click_right(x, y)
+                Mouse.click_right(position)
             elif task.click_type == ClickType.NO_CLICK:
-                Mouse.no_click(x, y)
+                Mouse.no_click(position)
             elif task.click_type == ClickType.SCROLL_DOWN:
-                Mouse.scroll_down(x, y)
+                Mouse.scroll_down(position)
             elif task.click_type == ClickType.SCROLL_UP:
-                Mouse.scroll_up(x, y)
+                Mouse.scroll_up(position)
         else:
-            (x, y) = self.coords_local_to_global(task.coordinates, task.window)  # FIXME
+            position = self.coords_local_to_global(task.click_position, task.window)  # FIXME
 
     def _run(self):
 

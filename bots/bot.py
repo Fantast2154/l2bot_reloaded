@@ -1,16 +1,19 @@
 from abc import ABC, abstractmethod
+from enum import Enum
+
+
+class BotStatus(Enum):
+    CREATED = 0
+    WORKING = 1
+    PAUSED = 2
+    WAITING = 3
+    ERROR = 4
 
 
 class Bot(ABC):
     """
     abstract class for bots
-
-    status values:
-    0 - created
-    1 - working
-    2 - paused
-    3 - waiting
-    4 - error
+    TODO: USE BotStatus enum for declaring bot status
     """
 
     @abstractmethod

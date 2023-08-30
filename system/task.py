@@ -1,5 +1,7 @@
 from enum import Enum
 
+from mathematics.vectors import Vector2i
+
 
 class ClickType(Enum):
     LEFT = 0
@@ -22,11 +24,11 @@ class MouseTask(Task):
     click options: LEFT, RIGHT, scroll_up, drag_n_drop_left, drag_n_drop_right
     """
     click_type = ClickType.LEFT
-    coordinates = None
+    click_position = Vector2i(0, 0)
 
-    def __init__(self, cl_type: ClickType, cl_coordinates, window):
-        self.click_type = cl_type
-        self.coordinates = cl_coordinates
+    def __init__(self, click_type: ClickType, click_position: Vector2i, window):
+        self.click_type = click_type
+        self.click_position = click_position
         self.window = window
 
 
@@ -34,7 +36,7 @@ class KeyboardTask(Task):
     button = None
     hold = False
 
-    def __init__(self, press_type, hold, window):
+    def __init__(self, press_type, hold: bool, window):
         self.button = press_type
         self.hold = hold
         self.window = window

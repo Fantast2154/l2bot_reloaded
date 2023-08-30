@@ -1,15 +1,8 @@
 import numpy as np
 import cv2 as cv
 from threading import Thread
-# from threading import Thread, Lock
 
-
-class DigitFinder:
-    pass
-
-
-class TimeRecognition:
-    pass
+from mathematics.vectors import Vector2i
 
 
 class Vision:
@@ -42,7 +35,7 @@ class Vision:
         # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
         self.method = method
 
-    def find(self, haystack_img, debug_mode=False, coordinates_and_sizes=False, message=False):
+    def find(self, haystack_img, debug_mode=False, coordinates_and_sizes=False, message=False, return_single=False):
         # run the OpenCV algorithm
         result = cv.matchTemplate(haystack_img, self.needle_img, self.method)
 
@@ -85,7 +78,7 @@ class Vision:
                 center_x = x + int(w / 2)
                 center_y = y + int(h / 2)
                 # Save the points
-                points.append((center_x, center_y))
+                points.append(Vector2i(center_x, center_y))
                 pos_and_sizes.append((x, y, w, h))
 
                 if debug_mode == 'rectangles':
@@ -113,7 +106,14 @@ class Vision:
                     print(haystack_img, 'найден')
                 else:
                     print(haystack_img, 'не найден')
-            return points
+
+            if return_single:
+                if len(points) > 0:
+                    return [points[0]]
+                else:
+                    raise Exception('Cant find ', haystack_img)
+            else:
+                return points
 
     def start(self):
         self.stopped = False

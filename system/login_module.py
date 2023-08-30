@@ -3,6 +3,8 @@ import time
 import keyboard
 import pyperclip
 
+from mathematics.vectors import Vector2i
+from system.task import MouseTask, ClickType
 from system.vision import Vision
 from system.l2window import L2window
 
@@ -51,7 +53,6 @@ class LoginModule:
 
         self.join_the_game(window)
 
-
     def __del__(self):
         self.send_message(f"login module destroyed")
 
@@ -85,21 +86,20 @@ class LoginModule:
         login = []
         while not joined:
             self.send_message('2')
-            login_pos = self.find('login', window)
-            terms_pos = self.find('terms', window)
-            server_pos = self.find('server', window)
-            select_pos = self.find('select', window)
-            menu_pos = self.find('menu', window)
-            cancel_pos = self.find('cancel', window)
-            disagree_pos = self.find('disagree', window)
-            relogin_pos = self.find('relogin', window)
+            login_pos = self.find('login', window, return_single=True)
+            terms_pos = self.find('terms', window, return_single=True)
+            server_pos = self.find('server', window, return_single=True)
+            select_pos = self.find('select', window, return_single=True)
+            menu_pos = self.find('menu', window, return_single=True)
+            cancel_pos = self.find('cancel', window, return_single=True)
+            disagree_pos = self.find('disagree', window, return_single=True)
+            relogin_pos = self.find('relogin', window, return_single=True)
 
             if login_pos:
                 stage = 'login_password'
                 if not login_password_stage_delay_started:
                     login_password_stage_delay_started = True
                     time_stage_delay = time.time()
-
             elif terms_pos:
                 stage = 'terms_of_conditions'
                 if not terms_stage_delay_started:
@@ -120,7 +120,6 @@ class LoginModule:
                 stage = 'game'
                 time_stage_delay = time.time()
                 return True, 0
-
             else:
                 stage = 'loading'
                 if not loading_stage_delay_started:
@@ -131,21 +130,15 @@ class LoginModule:
             if time.time() - time_stage_delay >= 5:
 
                 if cancel_pos:
-                    (x, y) = cancel_pos[-1]
-                    cancel = [(x, y)]
-                    self.click(cancel, window)
+                    self.click(cancel_pos[0], window)
                     loading_stage_delay_started = False
 
                 elif disagree_pos:
-                    (x, y) = disagree_pos[-1]
-                    disagree = [(x, y)]
-                    self.click(disagree, window)
+                    self.click(disagree_pos[0], window)
                     loading_stage_delay_started = False
 
                 elif relogin_pos:
-                    (x, y) = relogin_pos[0]
-                    relogin = [(x, y)]
-                    self.click(relogin, window)
+                    self.click(relogin_pos[0], window)
                     loading_stage_delay_started = False
 
                 login_password_stage_delay_started = False
@@ -164,12 +157,15 @@ class LoginModule:
                 # time.sleep(0.5)
                 # print(window.hwnd, 'Вычисляю...')
                 self.send_message('5')
+
                 if fisrt_time:
+
                     while not login:
-                        login = self.find('login', window)
-                    (x, y) = login[0]
-                    login_field = [(x, y - 60)]
-                    pass_field = [(x, y - 35)]
+                        login = self.find('login', window, return_single=True)
+
+                    pos = login[0]
+                    login_field = pos - Vector2i(0, 60)  # [(pos.x, pos.y - 60)]
+                    pass_field = pos - Vector2i(0, 35)  # [(pos.x, pos.y - 35)]
                     fisrt_time = False
 
                 self.login(window, login_field, pass_field)
@@ -201,53 +197,41 @@ class LoginModule:
                 print('Login is complete')
                 return True, 0
 
-    def click(self, button_pos, window):
-        # self.q.new_task('mouse',
-        #                 [button_pos, True, 'LEFT', False, 'double', 'NoRand'],
-        #                 window)
-        self.q.new_task('LEFT', [button_pos], window)
+    def click(self, button_pos: Vector2i, window):
+        new_task = MouseTask(ClickType.LEFT, button_pos, window)
+        self.q.new_task(new_task)
 
-    def double_click(self, button_pos, window):
-        # self.q.new_task('mouse',
-        #                 [button_pos, True, 'LEFT', False, 'double', 'NoRand'],
-        #                 window)
-        self.q.new_task('DOUBLE', [button_pos], window)
+    def double_click(self, button_pos: Vector2i, window):
+        new_task = MouseTask(ClickType.DOUBLE_LEFT, button_pos, window)
+        self.q.new_task(new_task)
 
-    def login(self, window, login_field, pass_field):
-        if login_field and pass_field:
-            # self.q.new_task('mouse',
-            #                 [login_field, True, 'LEFT', False, False, False],
-            #                 window)
-            self.click(login_field, window)
-            time.sleep(0.1)
-            # self.q.new_task('mouse',
-            #                 [login_field, True, 'LEFT', False, 'double', 'NoRand'],
-            #                 window)
-            self.double_click(login_field, window)
-            time.sleep(1)
-            pyperclip.copy(self.logins[window.hwnd])
-            time.sleep(0.1)
-            # keyboard.send('ctrl+v')
-            self.q.new_task('ctrlv', 'ctrl+v', window)
-            time.sleep(1)
-            # self.q.new_task('mouse',
-            #                 [pass_field, True, 'LEFT', False, False, False],
-            #                 window)
-            self.click(pass_field, window)
-            time.sleep(0.1)
-            # self.q.new_task('mouse',
-            #                 [pass_field, True, 'LEFT', False, 'double', 'NoRand'],
-            #                 window)
-            self.double_click(pass_field, window)
-            time.sleep(1)
-            pyperclip.copy(self.passwords[window.hwnd])
-            time.sleep(0.1)
-            # keyboard.send('ctrl+v')
-            self.q.new_task('ctrlv', 'ctrl+v', window)
-            time.sleep(0.5)
-            self.q.new_task('ctrlv', 'enter', window)
-            # keyboard.send('enter')
-            time.sleep(1)
+    def login(self, window, login_field_position: Vector2i, pass_field_position: Vector2i):
+        self.click(login_field_position, window)
+        time.sleep(0.1)
+
+        self.double_click(login_field_position, window)
+        time.sleep(1)
+
+        pyperclip.copy(self.logins[window.hwnd])
+        time.sleep(0.1)
+
+        self.q.new_task('ctrlv', 'ctrl+v', window)
+        time.sleep(1)
+
+        self.click(pass_field_position, window)
+        time.sleep(0.1)
+
+        self.double_click(pass_field_position, window)
+        time.sleep(1)
+
+        pyperclip.copy(self.passwords[window.hwnd])
+        time.sleep(0.1)
+
+        self.q.new_task('ctrlv', 'ctrl+v', window)
+        time.sleep(0.5)
+
+        self.q.new_task('ctrlv', 'enter', window)
+        time.sleep(1)
 
     def update_screenshot(self, window):
         while True:
@@ -267,9 +251,9 @@ class LoginModule:
     def send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
 
-    def find(self, object, window):  # returns list of positions
+    def find(self, object_to_find, window, return_single=False):  # returns list of Vector2i
         try:
-            position = self.library[object][0].find(window.update_screenshot())
+            position = self.library[object_to_find][0].find(window.update_screenshot(), return_single=return_single)
             return position
         except KeyError:
             # self.send_message(f'find function ERROR object search')
@@ -282,5 +266,3 @@ class LoginModule:
                 self.library[f'{obj[0]}'] = [Vision(obj[1], obj[2]), None]
             except:
                 print('Error finding images')
-
-
