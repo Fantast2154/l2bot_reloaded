@@ -1,13 +1,10 @@
-import time
-
-import keyboard
+from time import sleep, time
 import pyperclip
-
-from mathematics.vectors import Vector2i
-from system.task import MouseTask, ClickType
+from system.task import MouseTask, KeyboardTask, ClickType
 from system.vision import Vision
 from system.l2window import L2window
-
+from mathematics.vectors import Vector2i
+from system.task import MouseTask, ClickType
 
 class LoginModule:
     library = {}
@@ -61,7 +58,7 @@ class LoginModule:
 
         # self.q.new_task('LEFT', [[(100, 100)]], window)
         # self.click([[(100, 100)]], window)
-        # time.sleep(1)
+        # sleep(1)
         self.send_message('join_the_game')
         joined, win = self.stages(window)
         if not joined:
@@ -99,46 +96,48 @@ class LoginModule:
                 stage = 'login_password'
                 if not login_password_stage_delay_started:
                     login_password_stage_delay_started = True
-                    time_stage_delay = time.time()
+                    time_stage_delay = time()
+
             elif terms_pos:
                 stage = 'terms_of_conditions'
                 if not terms_stage_delay_started:
                     terms_stage_delay_started = True
-                    time_stage_delay = time.time()
+                    time_stage_delay = time()
             elif server_pos:
                 stage = 'select_server'
                 if not select_server_stage_delay_started:
                     select_server_stage_delay_started = True
-                    time_stage_delay = time.time()
+                    time_stage_delay = time()
             elif select_pos:
                 stage = 'select_character'
                 if not select_character_stage_delay_started:
                     select_character_stage_delay_started = True
-                    time_stage_delay = time.time()
+                    time_stage_delay = time()
             elif menu_pos:
                 self.send_message(f'{window.hwnd} И Г Р А!!!')
                 stage = 'game'
-                time_stage_delay = time.time()
+                time_stage_delay = time()
                 return True, 0
+
             else:
                 stage = 'loading'
                 if not loading_stage_delay_started:
                     loading_stage_delay_started = True
-                    time_stage_delay = time.time()
+                    time_stage_delay = time()
 
             self.send_message('3')
-            if time.time() - time_stage_delay >= 5:
+            if time() - time_stage_delay >= 5:
 
-                if cancel_pos:
-                    self.click(cancel_pos[0], window)
+                if cancel_pos:  # TODO: REMOVE [0]
+                    self.q.new_task(MouseTask(ClickType.LEFT, cancel_pos[0], window))
                     loading_stage_delay_started = False
 
                 elif disagree_pos:
-                    self.click(disagree_pos[0], window)
+                    self.q.new_task(MouseTask(ClickType.LEFT, disagree_pos[0], window))
                     loading_stage_delay_started = False
 
                 elif relogin_pos:
-                    self.click(relogin_pos[0], window)
+                    self.q.new_task(MouseTask(ClickType.LEFT, relogin_pos[0], window))
                     loading_stage_delay_started = False
 
                 login_password_stage_delay_started = False
@@ -146,7 +145,7 @@ class LoginModule:
                 select_server_stage_delay_started = False
                 select_character_stage_delay_started = False
 
-                if time.time() - time_stage_delay >= 35:
+                if time() - time_stage_delay >= 35:
                     print('Окно', window.hwnd, 'вход неуспешный.')
                     print('ТРЕБУЕТСЯ ПОЛНЫЙ ПЕРЕЗАПУСК')
                     return False, window
@@ -154,7 +153,7 @@ class LoginModule:
             if stage == 'login_password':
                 # print(window.hwnd, 'Стадия ввода логина и пароля')
                 # print(window.hwnd, 'Расчитываю...')
-                # time.sleep(0.5)
+                # sleep(0.5)
                 # print(window.hwnd, 'Вычисляю...')
                 self.send_message('5')
 
@@ -170,25 +169,24 @@ class LoginModule:
 
                 self.login(window, login_field, pass_field)
                 # print(window.hwnd, 'Авторизация прошла успешно. Вроде...')
-                time.sleep(2)
+                sleep(2)
 
             elif stage == 'terms_of_conditions':
                 # print(window.hwnd, 'Принятие пользовательского соглашения. БОТЫ ЗАПРЕЩЕНЫ!!!')
-                # keyboard.send('enter')
-                self.q.new_task('ctrlv', 'enter', window)
-                time.sleep(2)
+                self.q.new_task(KeyboardTask('enter', window))
+                sleep(2)
 
             elif stage == 'select_server':
                 # print(window.hwnd, 'Стадия выбора сервера')
-                # keyboard.send('enter')
-                self.q.new_task('ctrlv', 'enter', window)
-                time.sleep(2)
+
+                self.q.new_task(KeyboardTask('enter', window))
+                sleep(2)
 
             elif stage == 'select_character':
                 # print(window.hwnd, 'Стадия выбора персонажа')
-                # keyboard.send('enter')
-                self.q.new_task('ctrlv', 'enter', window)
-                time.sleep(3)
+
+                self.q.new_task(KeyboardTask('enter', window))
+                sleep(3)
 
             elif stage == 'loading':
                 continue
@@ -197,41 +195,29 @@ class LoginModule:
                 print('Login is complete')
                 return True, 0
 
-    def click(self, button_pos: Vector2i, window):
-        new_task = MouseTask(ClickType.LEFT, button_pos, window)
-        self.q.new_task(new_task)
-
-    def double_click(self, button_pos: Vector2i, window):
-        new_task = MouseTask(ClickType.DOUBLE_LEFT, button_pos, window)
-        self.q.new_task(new_task)
-
     def login(self, window, login_field_position: Vector2i, pass_field_position: Vector2i):
-        self.click(login_field_position, window)
-        time.sleep(0.1)
-
-        self.double_click(login_field_position, window)
-        time.sleep(1)
-
+        self.q.new_task(MouseTask(ClickType.LEFT, login_field_position, window))
+        sleep(0.1)
+        print('DOUBLE_CLICK')
+        self.q.new_task(MouseTask(ClickType.DOUBLE_LEFT, login_field_position, window))
+        sleep(1)
         pyperclip.copy(self.logins[window.hwnd])
-        time.sleep(0.1)
-
-        self.q.new_task('ctrlv', 'ctrl+v', window)
-        time.sleep(1)
-
-        self.click(pass_field_position, window)
-        time.sleep(0.1)
-
-        self.double_click(pass_field_position, window)
-        time.sleep(1)
-
+        print('test', self.logins[window.hwnd])
+        sleep(3)
+        print('CTRL-V')
+        self.q.new_task(KeyboardTask('ctrl+v', window))
+        sleep(1)
+        self.q.new_task(MouseTask(ClickType.LEFT, pass_field_position, window))
+        sleep(0.1)
+        self.q.new_task(MouseTask(ClickType.DOUBLE_LEFT, pass_field_position, window))
+        sleep(1)
         pyperclip.copy(self.passwords[window.hwnd])
-        time.sleep(0.1)
+        sleep(0.1)
+        self.q.new_task(KeyboardTask('ctrl+v', window))
+        sleep(0.1)
+        self.q.new_task(KeyboardTask('enter', window))
 
-        self.q.new_task('ctrlv', 'ctrl+v', window)
-        time.sleep(0.5)
-
-        self.q.new_task('ctrlv', 'enter', window)
-        time.sleep(1)
+        sleep(1)
 
     def update_screenshot(self, window):
         while True:
@@ -266,3 +252,5 @@ class LoginModule:
                 self.library[f'{obj[0]}'] = [Vision(obj[1], obj[2]), None]
             except:
                 print('Error finding images')
+
+

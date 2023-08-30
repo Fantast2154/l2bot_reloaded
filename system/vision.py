@@ -110,8 +110,6 @@ class Vision:
             if return_single:
                 if len(points) > 0:
                     return [points[0]]
-                else:
-                    raise Exception('Cant find ', haystack_img)
             else:
                 return points
 

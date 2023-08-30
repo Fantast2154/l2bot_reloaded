@@ -1,5 +1,6 @@
 from time import sleep
 import pynput
+import keyboard
 from pynput.mouse import Button
 from mathematics.vectors import Vector2i
 
@@ -31,6 +32,19 @@ class Mouse(ActionService):
         sleep(0.07)
         cls.mouse.release(Button.left)
         sleep(0.1)
+
+    @classmethod
+    def double_click_left(cls, position: Vector2i):
+        cls.mouse.position = (position.x, position.y)
+        sleep(0.03)
+        cls.mouse.press(Button.left)
+        sleep(0.07)
+        cls.mouse.release(Button.left)
+        sleep(0.07)
+        cls.mouse.press(Button.left)
+        sleep(0.07)
+        cls.mouse.release(Button.left)
+        sleep(0.07)
 
     @classmethod
     def click_right(cls, position: Vector2i):
@@ -67,4 +81,9 @@ class Mouse(ActionService):
 
 
 class Keyboard(ActionService):
-    pass
+    @classmethod
+    def ctrlv(cls, keyboard_button: str):
+        if keyboard_button:
+            sleep(0.1)
+            keyboard.send(keyboard_button)
+            sleep(0.1)

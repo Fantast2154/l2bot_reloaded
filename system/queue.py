@@ -45,7 +45,7 @@ class ActionQueue:
         coordinates: [(x, y)] or [(x1, y1), (x2, y2), ..]
         """
 
-        if task is MouseTask:
+        if type(task) is MouseTask:
             position = self.coords_local_to_global(task.click_position, task.window)
 
             if task.window.hwnd != self.last_active_window:
@@ -54,6 +54,8 @@ class ActionQueue:
 
             if task.click_type == ClickType.LEFT:
                 Mouse.click_left(position)
+            elif task.click_type == ClickType.DOUBLE_LEFT:
+                Mouse.double_click_left(position)
             elif task.click_type == ClickType.RIGHT:
                 Mouse.click_right(position)
             elif task.click_type == ClickType.NO_CLICK:
@@ -63,13 +65,13 @@ class ActionQueue:
             elif task.click_type == ClickType.SCROLL_UP:
                 Mouse.scroll_up(position)
         else:
-            position = self.coords_local_to_global(task.click_position, task.window)  # FIXME
+            Keyboard.ctrlv(task.button)
 
     def _run(self):
 
         while self.is_running[0]:
             self.send_message('Run')
-            sleep(self.queue_delay + 5)
+            sleep(self.queue_delay)
             try:
                 if self.tasks:
                     task = self.tasks.pop(0)

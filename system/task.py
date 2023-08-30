@@ -36,7 +36,7 @@ class KeyboardTask(Task):
     button = None
     hold = False
 
-    def __init__(self, press_type, hold: bool, window):
+    def __init__(self, press_type, window, hold: float = 0):
         self.button = press_type
         self.hold = hold
         self.window = window
