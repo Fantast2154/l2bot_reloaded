@@ -450,7 +450,7 @@ class L2WindowManager:
             x = rect[0]
             y = rect[1]
             # win32gui.EnumWindows(callback, None)
-            self.send_message(f'TEST x, y = {x}, {y}')
+
             for i in range(len(hwnd_laucnhed_list)):
                 if x == L2window.width * i:
                     new_hwnd_list.append(hwnd)

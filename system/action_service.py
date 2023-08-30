@@ -82,7 +82,7 @@ class Mouse(ActionService):
 
 class Keyboard(ActionService):
     @classmethod
-    def ctrlv(cls, keyboard_button: str):
+    def press_button(cls, keyboard_button: str):
         if keyboard_button:
             sleep(0.1)
             keyboard.send(keyboard_button)

@@ -2,14 +2,14 @@ import random
 import threading
 from time import sleep
 from multiprocessing import Process
-from view.view import View
+
 from user_props.personal_settings import PersonalSettings
 from system.model import Model
 from system.server import Server
 from system.queue import ActionQueue
 from system.l2window_manager import L2WindowManager
 from system.wincap import WindowCapture
-
+from gui.gui_service import GuiService
 from bots.farmer.farming_service import FarmingService
 
 
@@ -40,17 +40,19 @@ class Controller:
         self.personal_settings = PersonalSettings()
         self.model = Model(self)
         self.server = Server(self)
-        self.view = View(self)
         self.l2win_manager = L2WindowManager(self)
+        self.send_message('gui_serivce')
 
         self._init_controller()
         self._start_controller_thread()
-        self._start_gui()
+        self.gui_service = GuiService(self)
 
     def _init_controller(self):
+        self.send_message('_init_controller')
         self.start_q()
         self.start_wincap()
         sleep(3)
+        self.send_message('_start_controller_thread')
         self.launch_and_login_character()
         self.create_farming_service()  # test
 
@@ -93,27 +95,21 @@ class Controller:
         if self.server.is_running():
             self.server.stop()
 
-    def is_running(self):
-        return self.is_running
-
-    def _start_gui(self):
-        self.send_message('GUI has been launched')
-        if self.view.app.exec() == 0:
-            self._stop_controller()
+    def exit_is_set(self):
+        return self.exit_is_set
 
     def _start_controller_thread(self):
         controller_thread = threading.Thread(target=self._run)
         controller_thread.start()
 
-    def _stop_controller(self):
+    def stop_controller(self):
         self.stop_q()
         self.stop_wincap()
-        self.is_running = False
+        self.exit_is_set = True
 
     def _run(self):
-        self.send_message('starts')
-        self.is_running = False
+        self.exit_is_set = True
 
         # main loop
-        while self.is_running:
+        while not self.exit_is_set:
             pass

@@ -18,7 +18,7 @@ class ActionQueue:
         self.tasks = manager.list()
         self.queue_list = manager.list()
         self.last_active_window = 0
-        self.queue_delay = 0.2
+        self.queue_delay = 0.001
 
     def start(self):
         self.send_message('start queueing')
@@ -33,6 +33,12 @@ class ActionQueue:
         self.queue_list.append(1)
         self.tasks.append(pending_task)
 
+    def get_safe_click_position(self, window):
+        deltaX = window.wincap.offset_x[window.window_id]
+        deltaY = window.wincap.offset_y[window.window_id]
+        coordinates = Vector2i(5, window.height - 5)
+        return coordinates + Vector2i(deltaX, deltaY)
+
     def coords_local_to_global(self, coordinates: Vector2i, window) -> Vector2i:
         deltaX = window.wincap.offset_x[window.window_id]
         deltaY = window.wincap.offset_y[window.window_id]
@@ -40,14 +46,11 @@ class ActionQueue:
         return coordinates + Vector2i(deltaX, deltaY)
 
     def task_execution(self, task: MouseTask | KeyboardTask):
-        """
-        action: LEFT, RIGHT, drag_n_drop, turn, double, no_click
-        coordinates: [(x, y)] or [(x1, y1), (x2, y2), ..]
-        """
+
+
 
         if type(task) is MouseTask:
             position = self.coords_local_to_global(task.click_position, task.window)
-
             if task.window.hwnd != self.last_active_window:
                 self.last_active_window = task.window.hwnd
                 Mouse.activate_window(position)
@@ -65,12 +68,14 @@ class ActionQueue:
             elif task.click_type == ClickType.SCROLL_UP:
                 Mouse.scroll_up(position)
         else:
-            Keyboard.ctrlv(task.button)
+            if task.window.hwnd != self.last_active_window:
+                self.last_active_window = task.window.hwnd
+                Mouse.activate_window(self.get_safe_click_position(task.window))
+            Keyboard.press_button(task.button)
 
     def _run(self):
 
         while self.is_running[0]:
-            self.send_message('Run')
             sleep(self.queue_delay)
             try:
                 if self.tasks:
