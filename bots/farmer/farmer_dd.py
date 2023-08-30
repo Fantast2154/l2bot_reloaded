@@ -7,7 +7,7 @@ class FarmerDD(Bot):
     def __init__(self, id):
         self.id = id
         self.send_message('has been created')
-        self.exit_is_set = False
+        self.exit_is_set = True
         self.kill_count = 0
 
     def start(self):

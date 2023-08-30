@@ -16,7 +16,6 @@ class ActionQueue:
         self.tasks = manager.list()
         self.queue_list = manager.list()
         self.last_active_window = 0
-
         self.queue_delay = 0.2
 
     def start(self):
@@ -71,15 +70,15 @@ class ActionQueue:
             (x, y) = self.coords_local_to_global(task.coordinates, task.window)  # FIXME
 
     def _run(self):
+
         while self.is_running[0]:
-            sleep(self.queue_delay)
+            self.send_message('Run')
+            sleep(self.queue_delay + 5)
             try:
                 if self.tasks:
-                    task = self.tasks[0]
+                    task = self.tasks.pop(0)
                 else:
                     continue
-
-                self.tasks.pop(0)
 
                 self.task_execution(task)
             finally:
