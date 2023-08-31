@@ -1,7 +1,7 @@
 from view.view import View
 
 
-class GuiService:
+class GuiHandler:
 
     def send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))

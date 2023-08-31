@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from time import sleep
 
 
-class Service(ABC):
+class BotService(ABC):
     bot_processes = []
     bots = []
     exit_is_set = False

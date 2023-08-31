@@ -198,13 +198,10 @@ class LoginModule:
     def login(self, window, login_field_position: Vector2i, pass_field_position: Vector2i):
         self.q.new_task(MouseTask(ClickType.LEFT, login_field_position, window))
         sleep(0.1)
-        print('DOUBLE_CLICK')
         self.q.new_task(MouseTask(ClickType.DOUBLE_LEFT, login_field_position, window))
         sleep(1)
         pyperclip.copy(self.logins[window.hwnd])
-        print('test', self.logins[window.hwnd])
         sleep(3)
-        print('CTRL-V')
         self.q.new_task(KeyboardTask('ctrl+v', window))
         sleep(1)
         self.q.new_task(MouseTask(ClickType.LEFT, pass_field_position, window))
