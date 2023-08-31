@@ -6,6 +6,7 @@ from system.l2window import L2window
 from mathematics.vectors import Vector2i
 from system.task import MouseTask, ClickType
 
+
 class LoginModule:
     library = {}
     screenshot = None
@@ -198,13 +199,11 @@ class LoginModule:
     def login(self, window, login_field_position: Vector2i, pass_field_position: Vector2i):
         self.q.create_new_task(MouseTask(ClickType.LEFT, login_field_position, window))
         sleep(0.1)
-        print('DOUBLE_CLICK')
         self.q.create_new_task(MouseTask(ClickType.DOUBLE_LEFT, login_field_position, window))
         sleep(1)
         pyperclip.copy(self.logins[window.hwnd])
-        print('test', self.logins[window.hwnd])
         sleep(3)
-        print('CTRL-V')
+        self.q.new_task(KeyboardTask('ctrl+v', window))
         self.q.create_new_task(KeyboardTask('ctrl+v', window))
         sleep(1)
         self.q.create_new_task(MouseTask(ClickType.LEFT, pass_field_position, window))
@@ -252,5 +251,3 @@ class LoginModule:
                 self.library[f'{obj[0]}'] = [Vision(obj[1], obj[2]), None]
             except:
                 print('Error finding images')
-
-

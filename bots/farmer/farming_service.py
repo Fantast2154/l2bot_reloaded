@@ -1,11 +1,11 @@
 from multiprocessing import Process
 import threading
 from bots.farmer.farmer_dd import FarmerDD
-from bots.service import Service
+from bots.bot_service import BotService
 from bots.farmer.farmer_healer import FarmerHealer
 
 
-class FarmingService(Service):
+class FarmingService(BotService):
     def _send_message(self, message) -> None:
         print(str(self.__class__.__name__) + ': ' + str(message))
 
