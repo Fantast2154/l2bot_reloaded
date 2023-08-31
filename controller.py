@@ -60,7 +60,7 @@ class Controller:
     def _init_controller(self):
         self._start_q()
         self._start_wincap()
-        self.launch_and_login_character()
+        # self.launch_and_login_character()
         self.create_services()
 
     def launch_and_login_character(self, name='ПреображенскийЕВ'):
@@ -81,6 +81,7 @@ class Controller:
     def _start_q(self):
         self.q_process = Process(target=self.q.start)
         self.q_process.start()
+        sleep(1)
 
     def _stop_q(self):
         self.q.stop()
@@ -90,11 +91,10 @@ class Controller:
         self.wincap.set_windows(self.l2win_manager.l2windows)
         self.wincap_process = Process(target=self.wincap.start_capturing, args=(self.l2win_manager.screenshot,))
         self.wincap_process.start()
-        sleep(3)
 
     def _stop_wincap(self):
-        self.q.stop()
-        self.q_process.join()
+        self.wincap.stop()
+        self.wincap_process.join()
 
     def _start_server(self, permission_to_host):
         pass
@@ -110,15 +110,15 @@ class Controller:
 
     def _run(self):
         self.send_message('MAIN LOOP STARTS')
-        self.is_running = False
+        self.is_running = True
 
         # main loop
         while self.is_running:
-            pass
+            sleep(5)
 
         self.send_message('CONTROLLER STOPPED')
 
     def stop_controller(self):
-        self._stop_q()
         self._stop_wincap()
+        self._stop_q()
         self.is_running = False

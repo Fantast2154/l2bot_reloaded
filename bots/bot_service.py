@@ -1,15 +1,14 @@
 from abc import ABC, abstractmethod
 from time import sleep
 
-
 class BotService(ABC):
     bot_processes = []
     bots = []
     exit_is_set = False
 
-    @abstractmethod
-    def create_bot(self):
-        pass
+    # @abstractmethod
+    # def create_bot(self):
+    #     pass
 
     def _send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
@@ -58,9 +57,9 @@ class BotService(ABC):
     def resume_bots_which_paused(self):
         pass
 
-    @abstractmethod
-    def _run(self):
-        pass
+    # @abstractmethod
+    # def _run(self):
+    #     pass
 
     def stop(self):
         self.exit_is_set = True

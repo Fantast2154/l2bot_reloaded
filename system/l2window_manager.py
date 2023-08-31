@@ -1,5 +1,6 @@
 import os
 import time
+from time import sleep
 import win32con
 import win32gui
 from system.l2window import L2window
@@ -89,7 +90,6 @@ class L2WindowManager:
         for i, chr in enumerate(self.available_characters):
             if character == chr:
                 self.available_characters.pop(i)
-                # self.view.refresh_available_character_list(self.available_characters)
                 return True
 
         return False
@@ -111,7 +111,7 @@ class L2WindowManager:
         self.send_message(f'Number of connected windows {number_of_connected_windows}')
 
         self.launch_window()
-        time.sleep(5)
+        sleep(5)
         if len(self.l2windows) == number_of_connected_windows + 1:
             self.send_message(f'launch window {self.l2windows[-1].hwnd} was successful')
             self.login_window(character, self.l2windows[-1])
@@ -134,7 +134,7 @@ class L2WindowManager:
             self.default_chars = self.default_characters_farmer()
 
         self.close_all_windows()
-        time.sleep(2)
+        sleep(2)
         name_list, hash_list = self._get_l2windows_param()
         number_of_opened_windows = len(name_list)
 
@@ -161,7 +161,7 @@ class L2WindowManager:
                 self.send_message(f'login_default Connected characters: {self.get_character_names_connected()}')
                 self.send_message('Приятной охоты.')
 
-        time.sleep(2)
+        sleep(2)
         if sum(successfull_login_list) == len(self.default_chars):
             return True
 
@@ -187,22 +187,22 @@ class L2WindowManager:
     def launch_window(self):
 
         self.send_message('launching L2 window')
-        time.sleep(1)
+        sleep(1)
         os.startfile(self.personal_settings.launcher_path)
         t = time.time()
-        time.sleep(4)
+        sleep(4)
         hash1 = self.get_l2hash_launched()
         self.send_message(f'number of windows: {len(hash1)}')
         counter = 0
 
         while time.time() - t < self.delay_between_launching_windows:
-            time.sleep(1)
+            sleep(1)
             hash2 = self.get_l2hash_launched()
             if len(hash2) == (len(hash1) + 1):
                 break
             counter += 1
             # self.send_message(f'Launching..{counter}')
-        time.sleep(4)
+        sleep(4)
         self.connect_windows()
 
     def launch_default_configuration(self):
@@ -305,7 +305,7 @@ class L2WindowManager:
 
     def relog_fatal_windows(self):
         self.update_wincap()
-        time.sleep(1)
+        sleep(1)
         launched_unique, connected_unqiue = self.verify_launched_and_connected_hwnds()
         number_of_logged_windows = len(self.get_logged_windows())
         old_hwnds = []
@@ -326,7 +326,7 @@ class L2WindowManager:
 
         if len(self.get_logged_windows()) != number_of_logged_windows:
             _, new_hwnds = self.relog_all_windows()
-            time.sleep(2)
+            sleep(2)
 
         self.send_message('Fatal error is complete')
 
@@ -349,7 +349,7 @@ class L2WindowManager:
 
         self.close_all_windows()
 
-        time.sleep(3)
+        sleep(3)
         new_hwnds = []
         for character in connected_characters:
             number_of_connected_windows = len(self.l2windows)
@@ -481,10 +481,6 @@ class L2WindowManager:
         self.send_message('Connecting windows')
         hwnd_laucnhed_unique, hwnd_connected_unique = self.verify_launched_and_connected_hwnds()
         winnames_launched_unique, winnames_connected_unique = self.verify_launched_and_connected_winnames()
-
-        # for window in self.l2windows:
-        #     if window.hwnd in hwnd_connected_unique:
-        #         window.hwnd = hwnd_laucnhed_unique.pop()
 
         for hwnd in hwnd_laucnhed_unique:
             id = hwnd_laucnhed_unique.index(hwnd)
