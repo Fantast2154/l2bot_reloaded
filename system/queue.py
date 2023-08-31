@@ -29,7 +29,7 @@ class ActionQueue:
         self.send_message('stop queueing')
         self.is_running[0] = False
 
-    def new_task(self, pending_task: MouseTask | KeyboardTask) -> None:
+    def create_new_task(self, pending_task: MouseTask | KeyboardTask) -> None:
         self.queue_list.append(1)
         self.tasks.append(pending_task)
 
@@ -39,22 +39,20 @@ class ActionQueue:
         coordinates = Vector2i(5, window.height - 5)
         return coordinates + Vector2i(deltaX, deltaY)
 
-    def coords_local_to_global(self, coordinates: Vector2i, window) -> Vector2i:
-        deltaX = window.wincap.offset_x[window.window_id]
+    def convert_local_to_global(self, coordinates: Vector2i, window) -> Vector2i:
+        deltaX = window.wincap.offset_x[window.window_id]  # TODO: offset'ы ПЕРЕДЕЛАТЬ В ВЕКТОРА
         deltaY = window.wincap.offset_y[window.window_id]
 
         return coordinates + Vector2i(deltaX, deltaY)
 
-    def task_execution(self, task: MouseTask | KeyboardTask):
+    def execute_task(self, task: MouseTask | KeyboardTask):
 
-
+        if task.window.hwnd != self.last_active_window:
+            self.last_active_window = task.window.hwnd
+            Mouse.activate_window(self.get_safe_click_position(task.window))
 
         if type(task) is MouseTask:
-            position = self.coords_local_to_global(task.click_position, task.window)
-            if task.window.hwnd != self.last_active_window:
-                self.last_active_window = task.window.hwnd
-                Mouse.activate_window(position)
-
+            position = self.convert_local_to_global(task.click_position, task.window)
             if task.click_type == ClickType.LEFT:
                 Mouse.click_left(position)
             elif task.click_type == ClickType.DOUBLE_LEFT:
@@ -68,9 +66,6 @@ class ActionQueue:
             elif task.click_type == ClickType.SCROLL_UP:
                 Mouse.scroll_up(position)
         else:
-            if task.window.hwnd != self.last_active_window:
-                self.last_active_window = task.window.hwnd
-                Mouse.activate_window(self.get_safe_click_position(task.window))
             Keyboard.press_button(task.button)
 
     def _run(self):
@@ -83,6 +78,6 @@ class ActionQueue:
                 else:
                     continue
 
-                self.task_execution(task)
+                self.execute_task(task)
             finally:
                 pass

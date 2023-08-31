@@ -12,7 +12,7 @@ class GuiService:
         self.controller = controller
         self._start_gui()
 
-    def stop_bot(self):
+    def stop_bot(self):  # TODO: какого конкретно бота будет останавливать эта функция? Нужно передавать id
         pass
 
     def _start_gui(self):
@@ -21,7 +21,7 @@ class GuiService:
             self.send_message('GUI has been called to close')
             self.controller.stop_controller()
 
-    def start_bot(self):
+    def start_bot(self):  # TODO: какого конкретно бота будет запускать эта функция? Нужно передавать id
         self.controller.start_observing()
 
     def launch_windows(self, new_windows):

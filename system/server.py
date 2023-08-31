@@ -7,9 +7,5 @@ class Server:
         self.controller = controller
         self.is_running = False
 
-
-    def is_running(self):
-        return self.is_running
-
     def stop(self):
         self.is_running = False

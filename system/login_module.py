@@ -129,15 +129,15 @@ class LoginModule:
             if time() - time_stage_delay >= 5:
 
                 if cancel_pos:  # TODO: REMOVE [0]
-                    self.q.new_task(MouseTask(ClickType.LEFT, cancel_pos[0], window))
+                    self.q.create_new_task(MouseTask(ClickType.LEFT, cancel_pos[0], window))
                     loading_stage_delay_started = False
 
                 elif disagree_pos:
-                    self.q.new_task(MouseTask(ClickType.LEFT, disagree_pos[0], window))
+                    self.q.create_new_task(MouseTask(ClickType.LEFT, disagree_pos[0], window))
                     loading_stage_delay_started = False
 
                 elif relogin_pos:
-                    self.q.new_task(MouseTask(ClickType.LEFT, relogin_pos[0], window))
+                    self.q.create_new_task(MouseTask(ClickType.LEFT, relogin_pos[0], window))
                     loading_stage_delay_started = False
 
                 login_password_stage_delay_started = False
@@ -173,19 +173,19 @@ class LoginModule:
 
             elif stage == 'terms_of_conditions':
                 # print(window.hwnd, 'Принятие пользовательского соглашения. БОТЫ ЗАПРЕЩЕНЫ!!!')
-                self.q.new_task(KeyboardTask('enter', window))
+                self.q.create_new_task(KeyboardTask('enter', window))
                 sleep(2)
 
             elif stage == 'select_server':
                 # print(window.hwnd, 'Стадия выбора сервера')
 
-                self.q.new_task(KeyboardTask('enter', window))
+                self.q.create_new_task(KeyboardTask('enter', window))
                 sleep(2)
 
             elif stage == 'select_character':
                 # print(window.hwnd, 'Стадия выбора персонажа')
 
-                self.q.new_task(KeyboardTask('enter', window))
+                self.q.create_new_task(KeyboardTask('enter', window))
                 sleep(3)
 
             elif stage == 'loading':
@@ -196,26 +196,26 @@ class LoginModule:
                 return True, 0
 
     def login(self, window, login_field_position: Vector2i, pass_field_position: Vector2i):
-        self.q.new_task(MouseTask(ClickType.LEFT, login_field_position, window))
+        self.q.create_new_task(MouseTask(ClickType.LEFT, login_field_position, window))
         sleep(0.1)
         print('DOUBLE_CLICK')
-        self.q.new_task(MouseTask(ClickType.DOUBLE_LEFT, login_field_position, window))
+        self.q.create_new_task(MouseTask(ClickType.DOUBLE_LEFT, login_field_position, window))
         sleep(1)
         pyperclip.copy(self.logins[window.hwnd])
         print('test', self.logins[window.hwnd])
         sleep(3)
         print('CTRL-V')
-        self.q.new_task(KeyboardTask('ctrl+v', window))
+        self.q.create_new_task(KeyboardTask('ctrl+v', window))
         sleep(1)
-        self.q.new_task(MouseTask(ClickType.LEFT, pass_field_position, window))
+        self.q.create_new_task(MouseTask(ClickType.LEFT, pass_field_position, window))
         sleep(0.1)
-        self.q.new_task(MouseTask(ClickType.DOUBLE_LEFT, pass_field_position, window))
+        self.q.create_new_task(MouseTask(ClickType.DOUBLE_LEFT, pass_field_position, window))
         sleep(1)
         pyperclip.copy(self.passwords[window.hwnd])
         sleep(0.1)
-        self.q.new_task(KeyboardTask('ctrl+v', window))
+        self.q.create_new_task(KeyboardTask('ctrl+v', window))
         sleep(0.1)
-        self.q.new_task(KeyboardTask('enter', window))
+        self.q.create_new_task(KeyboardTask('enter', window))
 
         sleep(1)
 

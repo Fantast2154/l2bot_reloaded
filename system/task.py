@@ -34,9 +34,9 @@ class MouseTask(Task):
 
 class KeyboardTask(Task):
     button = None
-    hold = False
+    hold: float = 0.0
 
-    def __init__(self, press_type, window, hold: float = 0):
+    def __init__(self, press_type, window, hold: float = 0.0):
         self.button = press_type
         self.hold = hold
         self.window = window

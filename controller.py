@@ -9,8 +9,9 @@ from system.server import Server
 from system.queue import ActionQueue
 from system.l2window_manager import L2WindowManager
 from system.wincap import WindowCapture
-from gui.gui_service import GuiService
+from gui.gui_handler import GuiService
 from bots.farmer.farming_service import FarmingService
+from user_props.personal_settings_blank import PersonalSettingsBlank
 
 
 class Controller:
@@ -24,6 +25,7 @@ class Controller:
     server = None
     l2win_manager = None
     wincap = None
+    _is_running = False
 
     def send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
@@ -37,7 +39,7 @@ class Controller:
         self.send_message('has been created')
         self.q = ActionQueue()
         self.wincap = WindowCapture()
-        self.personal_settings = PersonalSettings()
+        self.personal_settings = PersonalSettingsBlank()
         self.model = Model(self)
         self.server = Server(self)
         self.l2win_manager = L2WindowManager(self)
@@ -95,8 +97,8 @@ class Controller:
         if self.server.is_running():
             self.server.stop()
 
-    def exit_is_set(self):
-        return self.exit_is_set
+    def is_running(self):
+        return self._is_running
 
     def _start_controller_thread(self):
         controller_thread = threading.Thread(target=self._run)
@@ -105,11 +107,11 @@ class Controller:
     def stop_controller(self):
         self.stop_q()
         self.stop_wincap()
-        self.exit_is_set = True
+        self._is_running = False
 
     def _run(self):
-        self.exit_is_set = True
+        self._is_running = True
 
         # main loop
-        while not self.exit_is_set:
+        while self._is_running:  # WARNING: НИКАКИХ СУКА EXIT_IS_SET. ТЫ ПО-РУССКИ ПИШИ. self._is_running НЕ ИСПРАВЛЯТЬ
             pass
