@@ -66,7 +66,7 @@ class WindowCapture:
     window_screenshot = []
 
     def __init__(self):
-        self.send_message("created")
+        self.send_message("has been created")
 
         manager = Manager()
         self.is_running = manager.list()
@@ -115,6 +115,7 @@ class WindowCapture:
         self.offset_x.clear()
         self.offset_y.clear()
 
+        hwnd_list = []
         if number_of_windows > 0:
             for window in windows_list:
                 temp_w = L2WindowOptimized(window)
@@ -124,8 +125,9 @@ class WindowCapture:
                 self.window_hwnd[window.window_id] = window.hwnd
                 self.window_id[window.window_id] = window.window_id
                 self.accurate[window.hwnd] = False
+                hwnd_list.append(window.hwnd)
 
-        self.send_message(f'Number of connected windows: {self.window_hwnd}')
+        self.send_message(f'Connected windows ({number_of_windows}): {hwnd_list}')
 
     def set_fishing_window(self, hwnd, x_fishwin, y_fishwin, w_fishwin, h_fishwin):
 
