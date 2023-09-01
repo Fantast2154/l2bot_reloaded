@@ -46,7 +46,6 @@ class PersonalSettingsBlank:
 
     package_network_interface = ''
     package_asterios_ip_prefix = '51.'
-    package_asterios_ip_prefix2 = '51.'
 
     def __init__(self):
         self_attributes_list = list(PersonalSettingsBlank.__dict__.keys())
