@@ -4,7 +4,6 @@ import sys
 
 class WindowUI(object):
     def __init__(self, MainWindow, controller):
-        self.send_message('created')
         self.main_window = MainWindow
         self.controller = controller
 

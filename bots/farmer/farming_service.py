@@ -9,9 +9,9 @@ class FarmingService(BotService):
 
     def __init__(self):
         self._send_message('has been created')
-        bot = self.create_bot()
-        self.start_bot(bot)
-        self.stop_bot(bot)
+        # bot = self.create_bot()
+        # self.start_bot(bot)
+        # self.stop_bot(bot)
 
     def create_bot(self):
         self._send_message('bot has been created')

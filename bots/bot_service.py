@@ -1,10 +1,11 @@
-from abc import ABC, abstractmethod
 from time import sleep
+from threading import Thread
 
-class BotService(ABC):
+
+class BotService:
     bot_processes = []
     bots = []
-    exit_is_set = False
+    is_running = False
 
     # @abstractmethod
     # def create_bot(self):
@@ -12,6 +13,19 @@ class BotService(ABC):
 
     def _send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
+
+    def start(self):
+        self._send_message('>> started <<')
+        self.is_running = True
+        thread = Thread(target=self._run)
+        thread.start()
+
+    def stop(self):
+        self.is_running = False
+
+    def _run(self):
+        while self.is_running:
+            sleep(5)
 
     def start_bot(self, bot):
         sleep(1)

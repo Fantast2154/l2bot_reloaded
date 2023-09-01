@@ -1,4 +1,5 @@
-from view.view import View
+# from view.view import View
+from view.view_old import View
 
 
 class GuiHandler:
@@ -51,5 +52,5 @@ class GuiHandler:
     def run_server(self):
         self.controller.run_server()
 
-    def launch_and_login_character(self, name):
-        self.controller.l2win_manager.launch_and_login_character(name)
+    def launch_and_login_char(self, name):
+        self.controller.launch_and_login_character(name)
