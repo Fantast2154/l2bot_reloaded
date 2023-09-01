@@ -5,11 +5,11 @@ import ctypes
 
 
 class WindowUI(object):
-    def __init__(self, MainWindow, controller):
-        self.send_message('created')
+    a = None
+    def __init__(self, MainWindow, gui_handler):
         self.window_name = 'baganec & germanec'
         self.main_window = MainWindow
-        self.controller = controller
+        self.gui_handler = gui_handler
 
         self.bot_box_groups = []
 
@@ -194,9 +194,9 @@ class WindowUI(object):
                                                                                self.internalHorizontalLayout))
 
     def add_bot_group_box(self, horizontal_layout_widget, internal_horizontal_layout):
-        a = AddBotLayout(horizontal_layout_widget, internal_horizontal_layout)
-        a.connect_methods_with_buttons(self.start_bot_click_event, self.stop_bot_click_event)
-        self.bot_box_groups.append(a)
+        self.a = AddBotLayout(horizontal_layout_widget, internal_horizontal_layout)
+        self.a.connect_methods_with_buttons(self.start_bot_click_event, self.stop_bot_click_event)
+        self.bot_box_groups.append(self.a)
 
     def add_bot_group_box_click(self, horizontal_layout_widget, internal_horizontal_layout):
         self.add_bot_group_box(horizontal_layout_widget, internal_horizontal_layout)
@@ -349,7 +349,7 @@ class WindowUI(object):
         pass
 
     def start_bot_click_event(self):
-        self.send_message("START BOT")
+        self.gui_handler.launch_and_login_char(self.a.accountsList.currentText())
         # self.controller.start_bot()
 
     def stop_bot_click_event(self):
@@ -357,7 +357,7 @@ class WindowUI(object):
         # self.controller.stop_bot()
 
     def windows_click_event(self):
-        self.controller.windows()
+        self.gui_handler.windows()
 
     def clicked(self, text):
         pass
@@ -522,16 +522,17 @@ class View(WindowUI):
     def send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
 
-    def __init__(self, controller):
+    def __init__(self, gui_handler):
+        self.send_message('has been created')
         self.app = QtWidgets.QApplication(sys.argv)
         self.MainWindow = QtWidgets.QMainWindow()
-        self.controller = controller
+        self.gui_handler = gui_handler
 
-        super(View, self).__init__(self.MainWindow, self.controller)
+        super(View, self).__init__(self.MainWindow, self.gui_handler)
         self.MainWindow.show()
         self.set_gui_position()
 
-        self.send_message('has been created')
+
 
 
 if __name__ == '__main__':

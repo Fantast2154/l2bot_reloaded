@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="WinIcon">
+    <file>fishing.jpg</file>
+  </qresource>
+</RCC>
