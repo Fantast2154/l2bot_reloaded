@@ -1,25 +1,26 @@
 from bots.bot import Bot
 
-class FarmerDD(Bot):
-    def send_message(self, message):
-        print(str(self.__class__.__name__) + ': ' + str(message))
 
-    def __init__(self, id):
-        self.id = id
-        self.send_message('has been created')
-        self.exit_is_set = True
+class BotDamager(Bot):
+
+    def __init__(self, damager_window, q):
+        self._send_message('has been created')
+        self.id = damager_window.window_id
+        self.q = q
+        self.is_running = False
         self.kill_count = 0
 
     def start(self):
-        self.send_message('started')
+        self._send_message('started')
+        self.is_running = True
         self._run()
 
     def stop(self):
-        self.send_message('stopped')
+        self._send_message('stopped')
 
     def _run(self):
-        self.send_message('разминаю пальчики')
-        while not self.exit_is_set:
+        self._send_message('разминаю пальчики')
+        while not self.is_running:
             if self.is_target():
                 self.start_fight()
                 while self.target_is_alive():
@@ -57,5 +58,3 @@ class FarmerDD(Bot):
 
     def click_find_mob(self):
         pass
-
-

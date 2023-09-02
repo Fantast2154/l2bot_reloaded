@@ -52,6 +52,7 @@ class Controller:
         self.l2win_manager = L2WindowManager(self)
 
         self._init_controller()
+        self.start_service(self.farming_service)
         self._start_controller_thread()
         self.gui_handler = GuiHandler(self)
 
@@ -68,12 +69,9 @@ class Controller:
     def stop_fishing_service(self):
         pass
 
-    def tt1(self):
-        self.send_message('test')
-
     def create_services(self):
         self.broker_service = BrokerService()
-        self.farming_service = FarmingService()
+        self.farming_service = FarmingService(self.l2win_manager, self.q)
         self.fishing_service = FishingService()
         self.manor_service = ManorService()
 

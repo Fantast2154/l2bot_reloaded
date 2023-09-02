@@ -9,9 +9,11 @@ class L2window:
     def send_message(self, message):
         print('{} {}: {}'.format(self.__class__.__name__, self.window_id, str(message)))
 
-    def __init__(self, window_id, wincap, window_name, hwnd, screenshot):
+    def __init__(self, personal_settings, window_id, wincap, window_name, hwnd, screenshot):
+        print('1')
 
         self.window_id = window_id
+        self.personal_settings = personal_settings
         x = 0
         y = 0
         # self.width = 630
@@ -22,11 +24,14 @@ class L2window:
         self.left_top_y = y
         self.width = self.width
         self.height = self.height
-
+        print('2')
         self.screenshot = screenshot
+        print('3')
         self.window_name = window_name
+        print('4')
         self.hwnd = hwnd
         self.wincap = wincap
+        print('5')
         self.owner = None
 
         self.send_message(f'has been created')

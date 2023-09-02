@@ -15,6 +15,11 @@ class Bot(ABC):
     abstract class for bots
     TODO: USE BotStatus enum for declaring bot status
     """
+    bot_id = 0
+
+    def _send_message(self, message):
+        print(str(self.__class__.__name__) + ': ' + str(message))
+
 
     @abstractmethod
     def start(self):
@@ -30,5 +35,6 @@ class Bot(ABC):
     def resume(self):
         pass
 
+    @abstractmethod
     def _run(self):
         pass
