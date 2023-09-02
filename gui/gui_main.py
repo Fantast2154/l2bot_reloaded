@@ -18,12 +18,11 @@ from gui.gui_resources import GUIResources, GUISettings
 from mathematics.vectors import Vector2i
 from user_props.personal_settings import PersonalSettings
 from view_props.developer_widget import DebugWidget
-from view_props.view import GUIHandler
 from view_props.release_widget import ReleaseWidget
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, gui_resources: GUIResources, gui_handler: GUIHandler):
+    def __init__(self, gui_resources: GUIResources, gui_handler):
         super().__init__()
 
         self.gui_resources = gui_resources

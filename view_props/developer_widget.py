@@ -17,11 +17,10 @@ from PyQt5.QtWidgets import (
 from gui.gui_resources import GUIResources, GUISettings
 from mathematics.vectors import Vector2i
 from user_props.personal_settings import PersonalSettings
-from view.gui_handler import GuiHandler
 
 
 class DebugWidget(QWidget):
-    def __init__(self, gui_resources: GUIResources, gui_handler: GuiHandler):
+    def __init__(self, gui_resources: GUIResources, gui_handler):
         super().__init__()
         self.gui_handler = gui_handler
         self.gui_resources = gui_resources

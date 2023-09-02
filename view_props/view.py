@@ -1,22 +1,25 @@
-# from view.view import View
-from view.view_old import View
+from PyQt5.QtWidgets import QApplication
+from gui.gui_main import MainWindow
+from gui.gui_resources import GUIResources
+
 from time import sleep
 
-class GuiHandler:
+
+class GUIHandler:
 
     def send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
 
     def __init__(self, controller):
         self.send_message('has been created')
-        self.view = View(self)
         self.controller = controller
-        self._start_gui()
+        self.view = View(GUIResources(), self)
+        self.start_gui()
 
     def stop_bot(self):  # TODO: какого конкретно бота будет останавливать эта функция? Нужно передавать id
         pass
 
-    def _start_gui(self):
+    def start_gui(self):
         self.send_message('GUI has been launched')
         if self.view.app.exec() == 0:
             self.send_message('GUI has been called to close')
@@ -56,3 +59,23 @@ class GuiHandler:
 
     def launch_and_login_char(self, name):
         self.controller.launch_and_login_character(name)
+
+
+class View:
+    def send_message(self, message):
+        print(str(self.__class__.__name__) + ': ' + str(message))
+
+    def __init__(self, gui_resources, gui_handler):
+        self.app = QApplication([])
+
+        resources = gui_resources
+        handler = gui_handler
+
+        self.window = MainWindow(resources, handler)
+        self.window.show()
+        self.send_message('has been created')
+
+
+if __name__ == '__main__':
+    view = View(None)
+    view.app.exec_()

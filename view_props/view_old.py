@@ -147,11 +147,11 @@ class WindowUI(object):
         if connected:
             self.internet_connection_label.setEnabled(True)
             self.internet_connection_label.setText("Online")
-            self.internetIcon.setPixmap(QtGui.QPixmap("view/qtfiles/online380x380.png"))
+            self.internetIcon.setPixmap(QtGui.QPixmap("view_props/qtfiles/online380x380.png"))
         else:
             self.internet_connection_label.setEnabled(False)
             self.internet_connection_label.setText("Offline")
-            self.internetIcon.setPixmap(QtGui.QPixmap("view/qtfiles/offline380x380.png"))
+            self.internetIcon.setPixmap(QtGui.QPixmap("view_props/qtfiles/offline380x380.png"))
 
     # def start(self):
     #     t = threading.Thread(target=self._run())

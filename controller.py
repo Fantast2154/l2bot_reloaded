@@ -8,13 +8,14 @@ from system.server import Server
 from system.queue import ActionQueue
 from system.l2window_manager import L2WindowManager
 from system.wincap import WindowCapture
-from view.gui_handler import GuiHandler
+from view_props.view import View, GUIHandler
 
 from bots.broker.broker_service import BrokerService
 from bots.farmer.farming_service import FarmingService
 from bots.fisher.fishing_service import FishingService
 from bots.manor_exchanger.manor_service import ManorService
 from user_props.personal_settings_blank import PersonalSettingsBlank
+
 
 class Controller:
     q = None
@@ -54,7 +55,7 @@ class Controller:
         self._init_controller()
         self.start_service(self.farming_service)
         self._start_controller_thread()
-        self.gui_handler = GuiHandler(self)
+        self.handler = GUIHandler(self)
 
     def _init_controller(self):
         self._start_q()
@@ -94,7 +95,7 @@ class Controller:
     def _start_wincap(self):
         self.wincap.set_windows(self.l2win_manager.l2windows)
         self.wincap_process = Process(target=self.wincap.start_capturing, args=(self.l2win_manager.screenshot,))
-        self.wincap_process.daemon = True
+        #self.wincap_process.daemon = True
         self.wincap_process.start()
 
     def _stop_wincap(self):
