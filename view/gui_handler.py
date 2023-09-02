@@ -1,6 +1,6 @@
 # from view.view import View
 from view.view_old import View
-
+from time import sleep
 
 class GuiHandler:
 
@@ -23,7 +23,7 @@ class GuiHandler:
             self.controller.stop_controller()
 
     def start_bot(self):  # TODO: какого конкретно бота будет запускать эта функция? Нужно передавать id
-        self.controller.start_observing()
+        self.controller.farming_service.start_bot(0)
 
     def launch_windows(self, new_windows):
         self.controller.l2win_manager.launch_extra_windows(new_windows)
@@ -38,7 +38,9 @@ class GuiHandler:
         self.controller.default_start_observing()
 
     def start_farm_default(self):
-        self.controller.default_start_farming()
+        self.controller.farming_service.create_damager()
+        sleep(3)
+        self.controller.farming_service.start_bot(0)
 
     def connect_windows(self):
         self.controller.l2win_manager.connect_windows()

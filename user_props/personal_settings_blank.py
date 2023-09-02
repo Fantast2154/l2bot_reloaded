@@ -7,7 +7,7 @@ class PersonalSettingsBlank:
     l2window_name_login = ''
     l2window_name_game = ''
 
-    l2window_name = ''
+    l2window_name = 'Asterios'
 
     logins = []
     passwords = []

@@ -47,12 +47,12 @@ class ActionQueue:
 
     def execute_task(self, task: MouseTask | KeyboardTask):
 
-        if task.window.hwnd != self.last_active_window:
-            self.last_active_window = task.window.hwnd
-            Mouse.activate_window(self.get_safe_click_position(task.window))
-
         if type(task) is MouseTask:
             position = self.convert_local_to_global(task.click_position, task.window)
+            if task.window.hwnd != self.last_active_window:
+                self.last_active_window = task.window.hwnd
+                Mouse.activate_window(position)
+
             if task.click_type == ClickType.LEFT:
                 Mouse.click_left(position)
             elif task.click_type == ClickType.DOUBLE_LEFT:
@@ -66,6 +66,9 @@ class ActionQueue:
             elif task.click_type == ClickType.SCROLL_UP:
                 Mouse.scroll_up(position)
         else:
+            if task.window.hwnd != self.last_active_window:
+                self.last_active_window = task.window.hwnd
+                Mouse.activate_window(self.get_safe_click_position(task.window))
             Keyboard.press_button(task.button)
 
     def _run(self):

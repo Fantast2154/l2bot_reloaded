@@ -203,7 +203,6 @@ class LoginModule:
         sleep(1)
         pyperclip.copy(self.logins[window.hwnd])
         sleep(3)
-        self.q.new_task(KeyboardTask('ctrl+v', window))
         self.q.create_new_task(KeyboardTask('ctrl+v', window))
         sleep(1)
         self.q.create_new_task(MouseTask(ClickType.LEFT, pass_field_position, window))

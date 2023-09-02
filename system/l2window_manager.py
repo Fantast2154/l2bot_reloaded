@@ -412,7 +412,7 @@ class L2WindowManager:
 
         """
         first_unused_id = self.find_first_unused_window_id()
-        temp_window = L2window(first_unused_id, self.wincap, window_name, hwnd, self.screenshot)
+        temp_window = L2window(self.personal_settings, first_unused_id, self.wincap, window_name, hwnd, self.screenshot)
         temp_window.connected = True
         self.l2windows.append(temp_window)
         temp_window.enum_handler()
