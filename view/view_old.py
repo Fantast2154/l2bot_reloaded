@@ -126,7 +126,7 @@ class WindowUI(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        #QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # self.startobservingButton.clicked.connect(lambda: self.start_observing())
         self.launchButton.clicked.connect(lambda: self.gui_handler.launch_windows(self.windowsCount.value()))
@@ -171,7 +171,7 @@ class WindowUI(object):
         MainWindow.setWindowTitle(_translate("MainWindow", self.window_name))
         self.startobservingButton.setText(_translate("MainWindow", "Start observing"))
         self.stopbservingButton.setText(_translate("MainWindow", "Stop observing"))
-        self.label.setText(_translate("MainWindow", "Telegram ID?"))
+        self.label.setText("Telegram ID?")
         self.label_2.setText(_translate("MainWindow", "Windows number?"))
         self.launchButton.setText(_translate("MainWindow", "Launch windows"))
         self.startFarm.setText(_translate("MainWindow", "Start FARM"))
