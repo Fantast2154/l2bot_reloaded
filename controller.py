@@ -79,8 +79,14 @@ class Controller:
     def start_service(self, service):
         service.start()
 
-    def stop_farming_service(self):
-        pass
+    def stop_service(self, service):
+        service.stop()
+
+    def stop_all_services(self):
+        self.broker_service.stop()
+        self.farming_service.stop()
+        self.fishing_service.stop()
+        self.manor_service.stop()
 
     def _start_q(self):
         self.q_process = Process(target=self.q.start)
@@ -89,6 +95,7 @@ class Controller:
         sleep(1)
 
     def _stop_q(self):
+        self.stop_all_services()
         self.q.stop()
         self.q_process.join()
 

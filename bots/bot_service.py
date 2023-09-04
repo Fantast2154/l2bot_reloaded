@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from bots.bot import Bot
 import warnings
 
+
 class BotService(ABC):
     bot_processes = {}
     bots = {}
@@ -25,9 +26,11 @@ class BotService(ABC):
         thread = Thread(target=self._run)
         thread.start()
 
-
     def stop(self):
         self.is_running = False
+        self.stop_bots()
+        sleep(3)
+        self._send_message('stopped')
 
     def _run(self):
         while self.is_running:
@@ -70,7 +73,6 @@ class BotService(ABC):
                 bot.stop()
                 self.bots.pop(i)
 
-
             for i, process in enumerate(self.bot_processes):
                 process.join()
                 self.bot_processes.pop(i)
@@ -96,8 +98,4 @@ class BotService(ABC):
     # def _run(self):
     #     pass
 
-    def stop(self):
-        self.exit_is_set = True
-        self.stop_bots()
-        sleep(3)
-        self._send_message('stopped')
+

@@ -1,26 +1,28 @@
 from bots.bot import Bot
-
+from multiprocessing import Manager
 
 class BotDamager(Bot):
 
     def __init__(self, damager_window, q):
         self._send_message('has been created')
+        manager = Manager()
         self.id = damager_window.window_id
         self.q = q
-        self.is_running = False
+        self.is_running = manager.list().append(False)
         self.kill_count = 0
 
     def start(self):
         self._send_message('started')
-        self.is_running = True
+        self.is_running[0] = True
         self._run()
 
     def stop(self):
         self._send_message('stopped')
+        self.is_running[0] = False
 
     def _run(self):
         self._send_message('разминаю пальчики')
-        while not self.is_running:
+        while self.is_running[0]:
             if self.is_target():
                 self.start_fight()
                 while self.target_is_alive():
