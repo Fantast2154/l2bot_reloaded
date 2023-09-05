@@ -1,10 +1,8 @@
 from time import sleep, time
 import pyperclip
-from system.task import MouseTask, KeyboardTask, ClickType
+from system.action_task import MouseTask, KeyboardTask, ClickType
 from system.vision import Vision
-from system.l2window import L2window
 from mathematics.vectors import Vector2i
-from system.task import MouseTask, ClickType
 
 
 class LoginModule:
