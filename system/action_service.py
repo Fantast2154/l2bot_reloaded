@@ -13,6 +13,9 @@ class ActionService:
 class Mouse(ActionService):
     mouse = pynput.mouse.Controller()
 
+    def _send_message(self, message):
+        print(str(self.__class__.__name__) + ': ' + str(message))
+
     @classmethod
     def activate_window(cls, position: Vector2i):
         cls.mouse.position = (position.x, position.y)

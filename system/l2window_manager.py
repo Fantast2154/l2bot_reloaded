@@ -18,7 +18,7 @@ class L2WindowManager:
     # l2windows_hwnd = []
     # l2windows_owner = []
 
-    def send_message(self, message):
+    def _send_message(self, message):
         print(str(self.__class__.__name__) + ': ' + str(message))
 
     def __init__(self, controller):
@@ -106,28 +106,28 @@ class L2WindowManager:
             return
 
         character = self.find_character_by_name(name)
-        self.send_message(f'Launching and logging {character.name}')
+        self._send_message(f'Launching and logging {character.name}')
         number_of_connected_windows = len(self.get_l2hash_connected())
-        self.send_message(f'Number of connected windows {number_of_connected_windows}')
+        self._send_message(f'Number of connected windows {number_of_connected_windows}')
 
         self.launch_window()
         sleep(5)
         if len(self.l2windows) == number_of_connected_windows + 1:
-            self.send_message(f'launch window {self.l2windows[-1].hwnd} was successful')
+            self._send_message(f'launch window {self.l2windows[-1].hwnd} was successful')
             self.login_window(character, self.l2windows[-1])
             self.remove_character_from_available_list(character)
-            self.send_message(f'Character {character.name} was successfully logged in')
+            self._send_message(f'Character {character.name} was successfully logged in')
             self.l2windows[-1].character = character
             self.l2windows[-1].logged = True
 
-            self.send_message('СМАЗАЛ ВАШЕГО МУРЛОКА: 15 1 ПРОВОКАЦИЯ, РЫВОК, ЩИТ, ПРЕДСМЕРТНЫЙ ХРИП.')
-            self.send_message('ЗАПУСК УСПЕШЕН. ИДИ С БОГОМ.')
+            self._send_message('СМАЗАЛ ВАШЕГО МУРЛОКА: 15 1 ПРОВОКАЦИЯ, РЫВОК, ЩИТ, ПРЕДСМЕРТНЫЙ ХРИП.')
+            self._send_message('ЗАПУСК УСПЕШЕН. ИДИ С БОГОМ.')
         else:
-            self.send_message(f'RELOG FAILED')
+            self._send_message(f'RELOG FAILED')
 
     def default_login(self, param):
         # todo после кликов connect windows, default login, загрузился модуль, но ничего не произошло
-        self.send_message('Login default')
+        self._send_message('Login default')
         if param == 'observer':
             self.default_chars = self.default_characters_observer()
         elif param == 'farmer':
@@ -157,16 +157,16 @@ class L2WindowManager:
                 window.character = new_character
 
                 window.logged = True
-                self.send_message(f'Window {window.hwnd} successfully logged in. Character:  {window.character.name}')
-                self.send_message(f'login_default Connected characters: {self.get_character_names_connected()}')
-                self.send_message('Приятной охоты.')
+                self._send_message(f'Window {window.hwnd} successfully logged in. Character:  {window.character.name}')
+                self._send_message(f'login_default Connected characters: {self.get_character_names_connected()}')
+                self._send_message('Приятной охоты.')
 
         sleep(2)
         if sum(successfull_login_list) == len(self.default_chars):
             return True
 
     def launch_extra_windows(self, new_windows=1):
-        self.send_message(f'launch {new_windows} windows')
+        self._send_message(f'launch {new_windows} windows')
         if type(new_windows) != int:
             return
 
@@ -176,7 +176,7 @@ class L2WindowManager:
                 self.launch_window()
 
     def update_wincap(self):
-        self.send_message('update_wincap')
+        self._send_message('update_wincap')
         name_list, hash_list = self._get_l2windows_param()
         if not self.l2windows:
             self.wincap.set_windows([])
@@ -186,13 +186,13 @@ class L2WindowManager:
 
     def launch_window(self):
 
-        self.send_message('launching L2 window')
+        self._send_message('launching L2 window')
         sleep(1)
         os.startfile(self.personal_settings.launcher_path)
         t = time.time()
         sleep(4)
         hash1 = self.get_l2hash_launched()
-        self.send_message(f'number of windows: {len(hash1)}')
+        self._send_message(f'number of windows: {len(hash1)}')
         counter = 0
 
         while time.time() - t < self.delay_between_launching_windows:
@@ -201,7 +201,7 @@ class L2WindowManager:
             if len(hash2) == (len(hash1) + 1):
                 break
             counter += 1
-            # self.send_message(f'Launching..{counter}')
+            # self._send_message(f'Launching..{counter}')
         sleep(4)
         self.connect_windows()
 
@@ -210,7 +210,7 @@ class L2WindowManager:
         launches 1 window for application (and skips if it is running)
         '''
 
-        self.send_message('launchBasicConfiguration')
+        self._send_message('launchBasicConfiguration')
         name_list, _ = self._get_l2windows_param()
         n = len(name_list)
         if n < self.personal_settings.basic_number_of_windows:
@@ -233,18 +233,18 @@ class L2WindowManager:
         self.update_wincap()
 
     def close_all_windows(self):
-        self.send_message('Closing all L2 windows')
+        self._send_message('Closing all L2 windows')
         l2windows_hwnd = self.get_l2hash_launched()
 
         if not l2windows_hwnd:
             return
 
-        self.send_message('ready to close')
+        self._send_message('ready to close')
 
         if self.get_character_names_connected():
-            self.send_message(f'Used characters: {self.get_character_names_connected()}')
+            self._send_message(f'Used characters: {self.get_character_names_connected()}')
             self.available_characters.extend(self.get_characters_connected())
-            self.send_message(f'Available characters: {self.get_available_character_names()}')
+            self._send_message(f'Available characters: {self.get_available_character_names()}')
 
         self.l2windows = []
 
@@ -259,26 +259,26 @@ class L2WindowManager:
     def relaunch_all_windows(self):
 
         l2win_hwnds = self.get_l2hash_launched()
-        self.send_message(f'Relaunching all L2 windows: {l2win_hwnds}')
+        self._send_message(f'Relaunching all L2 windows: {l2win_hwnds}')
         number_of_launched_windows = len(l2win_hwnds)
         if not number_of_launched_windows:
             return
 
         self.close_all_windows()
 
-        self.send_message(f'Launching {number_of_launched_windows} windows')
+        self._send_message(f'Launching {number_of_launched_windows} windows')
         for _ in range(number_of_launched_windows):
             self.launch_window()
 
-        self.send_message('relaunch_all_windows ENDING')
-        self.send_message(f'Relaunching all L2 windows is complete: {self.get_l2hash_connected()}')
+        self._send_message('relaunch_all_windows ENDING')
+        self._send_message(f'Relaunching all L2 windows is complete: {self.get_l2hash_connected()}')
 
     def relog_window(self, window):
 
-        self.send_message(f'Window to relog: {window.hwnd}')
-        self.send_message(f'Character to relog: {window.character.name}')
-        self.send_message(f'Connected characters: {self.get_character_names_connected()}')
-        self.send_message(f'Number of connected windows {self.get_l2hash_connected()}')
+        self._send_message(f'Window to relog: {window.hwnd}')
+        self._send_message(f'Character to relog: {window.character.name}')
+        self._send_message(f'Connected characters: {self.get_character_names_connected()}')
+        self._send_message(f'Number of connected windows {self.get_l2hash_connected()}')
 
         if not self.l2windows or not window.logged:
             return
@@ -287,19 +287,19 @@ class L2WindowManager:
 
         self.close_l2_window(window.hwnd)
         self.drop_window_from_list(window)
-        self.send_message(f'Number of connected windows_2 {self.get_l2hash_connected()}')
+        self._send_message(f'Number of connected windows_2 {self.get_l2hash_connected()}')
         self.update_wincap()
 
         number_of_connected_windows = len(self.l2windows)
         self.launch_window()
-        self.send_message(f'Number of connected windows_3 {self.get_l2hash_connected()}')
+        self._send_message(f'Number of connected windows_3 {self.get_l2hash_connected()}')
         if len(self.l2windows) == number_of_connected_windows + 1:
             self.login_window(character, self.l2windows[-1])
-            self.send_message(f'Window {self.l2windows[-1].hwnd} completed relog')
+            self._send_message(f'Window {self.l2windows[-1].hwnd} completed relog')
             self.l2windows[-1].character = character
             self.l2windows[-1].logged = True
         else:
-            self.send_message(f'РЕЛОГ ПОШЕЛ ПО ПИЗДЕ. НАЧАЛСЯ КОШМАР В ПОЕЗДЕ.')
+            self._send_message(f'РЕЛОГ ПОШЕЛ ПО ПИЗДЕ. НАЧАЛСЯ КОШМАР В ПОЕЗДЕ.')
 
         return self.l2windows[-1].hwnd
 
@@ -311,7 +311,7 @@ class L2WindowManager:
         old_hwnds = []
         new_hwnds = []
         if not connected_unqiue:
-            self.send_message('PIZDEC............def relog_fatal_windows')
+            self._send_message('PIZDEC............def relog_fatal_windows')
 
         for hwnd in connected_unqiue:
             window = self.find_hwnd_in_windows(hwnd)
@@ -320,15 +320,15 @@ class L2WindowManager:
                 new_hwnd = self.relog_window(window)
                 new_hwnds.append(new_hwnd)
 
-        self.send_message(f'Launched windows {self.get_l2hash_launched()}')
-        self.send_message(f'Connected windows: {self.get_l2hash_connected()}')
-        self.send_message(f'Connected characters: {self.get_character_names_connected()}')
+        self._send_message(f'Launched windows {self.get_l2hash_launched()}')
+        self._send_message(f'Connected windows: {self.get_l2hash_connected()}')
+        self._send_message(f'Connected characters: {self.get_character_names_connected()}')
 
         if len(self.get_logged_windows()) != number_of_logged_windows:
             _, new_hwnds = self.relog_all_windows()
             sleep(2)
 
-        self.send_message('Fatal error is complete')
+        self._send_message('Fatal error is complete')
 
         return old_hwnds, new_hwnds
 
@@ -344,7 +344,7 @@ class L2WindowManager:
             return
 
         old_l2_hwnds_connected = self.get_l2hash_connected()
-        self.send_message(f'Relog all L2 windows: {old_l2_hwnds_connected}')
+        self._send_message(f'Relog all L2 windows: {old_l2_hwnds_connected}')
         connected_characters = self.get_characters_connected()
 
         self.close_all_windows()
@@ -353,22 +353,22 @@ class L2WindowManager:
         new_hwnds = []
         for character in connected_characters:
             number_of_connected_windows = len(self.l2windows)
-            self.send_message(f'Number of connected windows_00 {self.get_l2hash_connected()}')
+            self._send_message(f'Number of connected windows_00 {self.get_l2hash_connected()}')
             self.launch_window()
-            self.send_message(f'Number of connected windows_11 {self.get_l2hash_connected()}')
+            self._send_message(f'Number of connected windows_11 {self.get_l2hash_connected()}')
             if len(self.l2windows) == number_of_connected_windows + 1:
                 self.login_window(character, self.l2windows[-1])
                 new_hwnds.append(self.l2windows[-1].hwnd)
-                self.send_message(f'Window {self.l2windows[-1].hwnd} completed relog')
+                self._send_message(f'Window {self.l2windows[-1].hwnd} completed relog')
                 self.l2windows[-1].character = character
                 self.l2windows[-1].logged = True
             else:
-                self.send_message(f'РЕЛОГ ПОШЕЛ ПО ПИЗДЕ. НАЧАЛСЯ КОШМАР В ПОЕЗДЕ.')
+                self._send_message(f'РЕЛОГ ПОШЕЛ ПО ПИЗДЕ. НАЧАЛСЯ КОШМАР В ПОЕЗДЕ.')
 
-        self.send_message(f'Launched windows {self.get_l2hash_launched()}')
-        self.send_message(f'Connected windows: {self.get_l2hash_connected()}')
-        self.send_message(f'Connected characters: {self.get_character_names_connected()}')
-        self.send_message('Я ЗАКОНЧИЛ РЕЛОГИН. ЧТО ДАЛЬШЕ?')
+        self._send_message(f'Launched windows {self.get_l2hash_launched()}')
+        self._send_message(f'Connected windows: {self.get_l2hash_connected()}')
+        self._send_message(f'Connected characters: {self.get_character_names_connected()}')
+        self._send_message('Я ЗАКОНЧИЛ РЕЛОГИН. ЧТО ДАЛЬШЕ?')
 
         return old_l2_hwnds_connected, new_hwnds
 
@@ -421,7 +421,7 @@ class L2WindowManager:
         ids = []
         if self.l2windows:
             ids = [window.window_id for window in self.l2windows]
-            self.send_message(f'find_first_unused_window_id ids {ids}')
+            self._send_message(f'find_first_unused_window_id ids {ids}')
         if not ids:
             return 0
         first_unused_id = max(ids) + 1
@@ -429,7 +429,7 @@ class L2WindowManager:
         for i in range(len(self.l2windows)):
             if i != ids[i]:
                 first_unused_id = i
-        self.send_message(f'first_unused_id {first_unused_id}')
+        self._send_message(f'first_unused_id {first_unused_id}')
         return first_unused_id
 
     def initial_connect_windows(self):
@@ -456,7 +456,7 @@ class L2WindowManager:
                     new_hwnd_list.append(hwnd)
 
         if len(new_hwnd_list) != len(hwnd_laucnhed_list):
-            self.send_message('error initial_connect_windows')
+            self._send_message('error initial_connect_windows')
             new_hwnd_list = hwnd_laucnhed_list
 
         for hwnd in new_hwnd_list:
@@ -478,7 +478,7 @@ class L2WindowManager:
         case 3. launched windows = connected windows
         case 4. connected windows > launched windows
         """
-        self.send_message('Connecting windows')
+        self._send_message('Connecting windows')
         hwnd_laucnhed_unique, hwnd_connected_unique = self.verify_launched_and_connected_hwnds()
         winnames_launched_unique, winnames_connected_unique = self.verify_launched_and_connected_winnames()
 

@@ -5,7 +5,7 @@ from multiprocessing import Process
 from user_props.personal_settings import PersonalSettings
 from system.model import Model
 from system.server import Server
-from system.queue import ActionQueue
+from system.action_queue import ActionQueue
 from system.l2window_manager import L2WindowManager
 from system.wincap import WindowCapture
 from view_props.view import View, GUIHandler

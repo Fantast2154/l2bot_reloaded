@@ -47,6 +47,10 @@ class Vector2i:
     def __bool__(self):
         return self.get_length() > 0
 
+    @staticmethod
+    def empty() -> EmptyVector:
+        return EmptyVector()
+
     def get_length(self) -> int:
         return int(math.sqrt(self.x ** 2 + self.y ** 2))
 
@@ -62,3 +66,11 @@ class Vector2i:
         x_normed = int(self.x / length)
         y_normed = int(self.y / length)
         return Vector2i(x_normed, y_normed)
+
+
+class EmptyVector:
+    def __init__(self):
+        pass
+
+    def __bool__(self):
+        return False

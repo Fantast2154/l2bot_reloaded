@@ -1,7 +1,6 @@
 import numpy as np
 import cv2 as cv
 from threading import Thread
-
 from mathematics.vectors import Vector2i
 
 
@@ -35,7 +34,7 @@ class Vision:
         # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
         self.method = method
 
-    def find(self, haystack_img, debug_mode=False, coordinates_and_sizes=False, message=False, return_single=False):
+    def find(self, haystack_img, debug_mode=False, coordinates_and_sizes=False, message=False, return_single=False) -> list[Vector2i]:
         # run the OpenCV algorithm
         result = cv.matchTemplate(haystack_img, self.needle_img, self.method)
 
