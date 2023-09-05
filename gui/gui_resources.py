@@ -10,7 +10,7 @@ class GUISettings:
 
 
 class GUIResources:
-    __settings_file = 'gui_settings.pkl'
+    __settings_file = '/gui/gui_settings.pkl'
 
     window_name = 'baganec & germanec'
 
@@ -38,9 +38,9 @@ class GUIResources:
         pass
 
     def save_settings(self, settings: GUISettings):
-        with open(self.__settings_file, 'wb') as f:
+        with open(os.path.dirname(os.path.dirname(__file__)) + self.__settings_file, 'wb') as f:
             pickle.dump(settings, f)
 
     def load_settings(self) -> GUISettings:
-        with open(self.__settings_file, 'rb') as f:
+        with open(os.path.dirname(os.path.dirname(__file__)) + self.__settings_file, 'rb') as f:
             return pickle.load(f)
