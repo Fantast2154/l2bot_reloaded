@@ -10,6 +10,7 @@ class BotDamager(Bot):
         self.q = q
         self.is_running = manager.list().append(False)
         self.kill_count = 0
+        print("")
 
     def start(self):
         self._send_message('started')
