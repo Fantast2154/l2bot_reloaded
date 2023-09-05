@@ -1,25 +1,21 @@
 import ctypes
-import sys
 import warnings
 
-import win32gui
-from PyQt5.QtCore import QRect, Qt, QCoreApplication
-from PyQt5.QtGui import QIcon, QMoveEvent
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import (
     QWidget, QPushButton,
-    QHBoxLayout, QGridLayout,
+    QGridLayout,
     QApplication,
-    QMainWindow, QTabBar, QVBoxLayout, QTabWidget, QCheckBox, QLabel, QSpinBox, QLineEdit, QComboBox, QMenuBar, QMenu,
-    QAction, QRadioButton, QGroupBox, QFrame,
-)
+    QMainWindow, QTabWidget, QLabel, QMenuBar, QMenu,
+    QAction, )
 
 from gui.gui_resources import GUIResources, GUISettings
 from mathematics.vectors import Vector2i
-from user_props.personal_settings import PersonalSettings
-from view_props.developer_widget import DebugWidget
+from gui.developer_widget import DebugWidget
 from view_props.view import GUIHandler
-from view_props.release_widget import ReleaseWidget
+from gui.release_widget import ReleaseWidget
 
 
 class MainWindow(QMainWindow):

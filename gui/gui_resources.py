@@ -22,6 +22,18 @@ class GUIResources:
     internet_connection_disabled_icon_path = project_root + '/gui/icons/offline380x380.png'
     plus_icon = project_root + '/gui/icons/plus.png'
 
+    start_icon = project_root + '/gui/icons/start_icon380x380.png'
+    stop_icon = project_root + '/gui/icons/stop_icon380x380.png'
+    pause_icon = project_root + '/gui/icons/pause_icon380x380.png'
+    kill_icon = project_root + '/gui/icons/kill_icon380x380.png'
+    switch_icon = project_root + '/gui/icons/switch_icon380x380.png'
+
+    active_icon = project_root + '/gui/icons/active_icon380x380.png'
+    inactive_icon = project_root + '/gui/icons/inactive_icon380x380.png'
+    paused_icon = project_root + '/gui/icons/paused_icon380x380.png'
+    busy_icon = project_root + '/gui/icons/busy_icon380x380.png'
+    delete_icon = project_root + '/gui/icons/cross.png'
+
     def __init__(self):
         pass
 

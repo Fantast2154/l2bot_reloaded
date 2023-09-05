@@ -3,6 +3,7 @@ __pycache__/
 
 user_props/personal_settings.py
 gui/gui_settings.pkl
+gui/scheme_hd.psb
 gui_settings.pkl
 
 db.sqlite3
