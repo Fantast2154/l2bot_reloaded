@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication
-from gui.gui_main import MainWindow
+from gui.gui_main_v2 import MainWindow
 from gui.gui_resources import GUIResources
 
 from time import sleep
@@ -38,7 +38,8 @@ class GUIHandler:
         self.controller.l2win_manager.close_all_windows()
 
     def login_default(self):
-        self.controller.default_start_observing()
+        #self.controller.default_start_observing()
+        self.send_message('LOGIN DEFAULT')
 
     def start_farm_default(self):
         self.controller.farming_service.create_damager()

@@ -102,12 +102,18 @@ class Controller:
     def _start_wincap(self):
         self.wincap.set_windows(self.l2win_manager.l2windows)
         self.wincap_process = Process(target=self.wincap.start_capturing, args=(self.l2win_manager.screenshot,))
-        #self.wincap_process.daemon = True
+        # self.wincap_process.daemon = True
         self.wincap_process.start()
 
     def _stop_wincap(self):
         self.wincap.stop()
         self.wincap_process.join()
+
+    def connect_to_server(self):
+        self.send_message('CONNECT TO SERVER')
+
+    def run_server(self):
+        self.send_message('CONNECT TO SERVER')
 
     def _start_server(self, permission_to_host):
         pass
