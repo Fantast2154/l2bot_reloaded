@@ -23,62 +23,28 @@ from user_props.personal_settings import PersonalSettings
 
 
 class DeveloperWidget(QWidget):
-    def __init__(self):
-        super().__init__()
-        # uic.loadUi('test_widget.ui', self)
-        project_root = os.path.dirname(os.path.dirname(__file__))
-        uic.loadUi(project_root + '/gui/developer_tab.ui', self)
-        # uic.loadUi('test_folder/ui_test01.ui', self)
-
-
-class MainWindow(QMainWindow):
     def __init__(self, gui_resources: GUIResources, gui_handler):
         super().__init__()
-        self.developer_tab = None
         self.gui_resources = gui_resources
         self.gui_handler = gui_handler
 
         project_root = os.path.dirname(os.path.dirname(__file__))
-        uic.loadUi(project_root + '/gui/main_window.ui', self)
+        uic.loadUi(project_root + '/gui/developer_tab.ui', self)
 
-        self.setup_ui()
-        self.initialize_icons()
+        self.hook_to_all_buttons()
         self.initialize_characters_list()
-        self.load_settings()
-
-    def setup_ui(self):
-        self.developer_tab = DeveloperWidget()
-        self.my_horizontal_layout.addWidget(self.developer_tab, alignment=Qt.AlignVCenter | Qt.AlignHCenter)
-        self.hook_to_all_buttons(self.developer_tab)
-
-    def initialize_icons(self):
-        self.internet_connection_update(False)
-
-        self.setWindowIcon(QIcon(self.gui_resources.header_icon_path))
-        self.setWindowTitle(self.gui_resources.window_name)
-
-        self.save_position.setIcon(QIcon(self.gui_resources.save_icon_path))
-
-        icons = [self.gui_resources.internet_connection_disabled_icon_path,
-                 self.gui_resources.internet_connection_enabled_icon_path,
-                 ]
-
-        for i in range(0, self.tab_widget.count()):
-            self.tab_widget.setTabIcon(i, QIcon(icons[i]))
 
     def initialize_characters_list(self):
-        self.developer_tab.characters.addItems(PersonalSettings.names)
-        self.developer_tab.characters.setCurrentText(PersonalSettings.names[0])
+        self.characters.addItems(PersonalSettings.names)
+        self.characters.setCurrentText(PersonalSettings.names[0])
 
-    def hook_to_all_buttons(self, widget):
+    def hook_to_all_buttons(self):
         buttons = [name.lstrip('button_') for name in self.__dir__() if name.startswith('button_')]
         for b in buttons:
             button_method = self.__getattribute__('button_' + b)
             # widget.__dict__[b].clicked.connect(button_method)
-            widget.__dict__[b].clicked.connect(lambda _, f=button_method: f())
+            self.__dict__[b].clicked.connect(lambda _, f=button_method: f())
             print(button_method)
-
-        self.save_position.clicked.connect(lambda: self.save_settings())
 
     # TODO: clicked.connect В ЦИКЛЕ НЕ РАБОТАЕТ С ЛЯМБДАМИ!!!! ПОЧЕМУ? РАЗБОРАТЬСЯ! ЦЕПЛЯЕМСЯ БЕЗ ЛЯМБДЫ
     # UPDATE: https://stackoverflow.com/questions/3431676/creating-functions-or-lambdas-in-a-loop-or-comprehension
@@ -98,6 +64,78 @@ class MainWindow(QMainWindow):
         #     print(f)
         #     counter += 1
     '''
+
+    def button_launch_windows(self):
+        value = self.windows_number.value()
+        self.gui_handler.launch_windows(value)
+
+    def button_relaunch_all_windows(self):
+        self.gui_handler.relaunch_windows()
+
+    def button_close_all_windows(self):
+        self.gui_handler.close_all_windows()
+
+    def button_relog_all_windows(self):
+        self.gui_handler.relog_all_windows()
+
+    def button_start_farm(self):
+        self.gui_handler.start_bot()
+
+    def button_stop_farm(self):
+        self.gui_handler.stop_bot()
+
+    def button_connect_to_server(self):
+        self.gui_handler.connect_to_server()
+
+    def button_run_server(self):
+        self.gui_handler.run_server()
+
+    def button_launch_login_from_list(self):
+        self.gui_handler.launch_and_login_char(self.characters.currentText())
+
+    def button_default_observing(self):
+        self.gui_handler.login_default()
+
+    def button_start_observing(self):
+        print('start observing')
+
+    def button_stop_observing(self):
+        print('stop observing')
+
+
+class MainWindow(QMainWindow):
+    def __init__(self, gui_resources: GUIResources, gui_handler):
+        super().__init__()
+        self.developer_tab = None
+        self.gui_resources = gui_resources
+        self.gui_handler = gui_handler
+
+        project_root = os.path.dirname(os.path.dirname(__file__))
+        uic.loadUi(project_root + '/gui/main_window.ui', self)
+
+        self.setup_ui()
+        self.initialize_icons()
+        self.load_settings()
+
+    def setup_ui(self):
+        self.developer_tab = DeveloperWidget(self.gui_resources, self.gui_handler)
+        self.my_horizontal_layout.addWidget(self.developer_tab, alignment=Qt.AlignVCenter | Qt.AlignHCenter)
+        self.save_position.clicked.connect(lambda: self.save_settings())
+
+    def initialize_icons(self):
+        self.internet_connection_update(False)
+
+        self.setWindowIcon(QIcon(self.gui_resources.header_icon_path))
+        self.setWindowTitle(self.gui_resources.window_name)
+
+        self.save_position.setIcon(QIcon(self.gui_resources.save_icon_path))
+
+        icons = [self.gui_resources.internet_connection_disabled_icon_path,
+                 self.gui_resources.internet_connection_enabled_icon_path,
+                 ]
+
+        for i in range(0, self.tab_widget.count()):
+            self.tab_widget.setTabIcon(i, QIcon(icons[i]))
 
     def moveEvent(self, event: QtGui.QMoveEvent) -> None:
         super().moveEvent(event)
@@ -150,43 +188,6 @@ class MainWindow(QMainWindow):
             self.internet_connection_label.setText("Offline")
             self.internet_connection_icon.setPixmap(
                 QtGui.QPixmap(self.gui_resources.internet_connection_disabled_icon_path))
-
-    def button_launch_windows(self):
-        value = self.developer_tab.windows_number.value()
-        self.gui_handler.launch_windows(value)
-
-    def button_relaunch_all_windows(self):
-        self.gui_handler.relaunch_windows()
-
-    def button_close_all_windows(self):
-        self.gui_handler.close_all_windows()
-
-    def button_relog_all_windows(self):
-        self.gui_handler.relog_all_windows()
-
-    def button_start_farm(self):
-        self.gui_handler.start_bot()
-
-    def button_stop_farm(self):
-        self.gui_handler.stop_bot()
-
-    def button_connect_to_server(self):
-        self.gui_handler.connect_to_server()
-
-    def button_run_server(self):
-        self.gui_handler.run_server()
-
-    def button_launch_login_from_list(self):
-        self.gui_handler.launch_and_login_char(self.developer_tab.characters.currentText())
-
-    def button_default_observing(self):
-        self.gui_handler.login_default()
-
-    def button_start_observing(self):
-        print('start observing')
-
-    def button_stop_observing(self):
-        print('stop observing')
 
 
 if __name__ == '__main__':
