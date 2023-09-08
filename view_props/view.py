@@ -1,3 +1,5 @@
+import threading
+
 from PyQt5.QtWidgets import QApplication
 from gui.gui_main_v2 import MainWindow
 from gui.gui_resources import GUIResources
@@ -59,7 +61,10 @@ class GUIHandler:
         self.controller.run_server()
 
     def launch_and_login_char(self, name):
-        self.controller.launch_and_login_character(name)
+        t = threading.Thread(target=self.controller.launch_and_login_character,
+                             args=(name, ))
+        t.start()
+        #self.controller.launch_and_login_character(name)
 
 
 class View:
