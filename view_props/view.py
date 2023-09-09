@@ -40,7 +40,7 @@ class GUIHandler:
         self.controller.l2win_manager.close_all_windows()
 
     def login_default(self):
-        #self.controller.default_start_observing()
+        # self.controller.default_start_observing()
         self.send_message('LOGIN DEFAULT')
 
     def start_farm_default(self):
@@ -62,9 +62,9 @@ class GUIHandler:
 
     def launch_and_login_char(self, name):
         t = threading.Thread(target=self.controller.launch_and_login_character,
-                             args=(name, ))
+                             args=(name,))
         t.start()
-        #self.controller.launch_and_login_character(name)
+        # self.controller.launch_and_login_character(name)
 
 
 class View:

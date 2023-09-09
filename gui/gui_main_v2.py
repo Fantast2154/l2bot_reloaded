@@ -47,10 +47,11 @@ class DeveloperWidget(QWidget):
             print(button_method)
 
     # TODO: clicked.connect В ЦИКЛЕ НЕ РАБОТАЕТ С ЛЯМБДАМИ!!!! ПОЧЕМУ? РАЗБОРАТЬСЯ! ЦЕПЛЯЕМСЯ БЕЗ ЛЯМБДЫ
-    # UPDATE: https://stackoverflow.com/questions/3431676/creating-functions-or-lambdas-in-a-loop-or-comprehension
+    # UPDATE: проблема не в clicked.connect, а самих лямбда-функциях в циклах:
+    # https://stackoverflow.com/questions/3431676/creating-functions-or-lambdas-in-a-loop-or-comprehension
     # РЕШЕНИЕ: вместо .clicked.connect(lambda : button_method()) использовать
     # .clicked.connect(lambda _, f=button_method: f())
-    # _ (нижнее подчеркивание) нужно, чтобы исбоавиться от БУЛЕВА значения в методе connect
+    # _ (нижнее подчеркивание) нужно, чтобы избавиться от БУЛЕВА значения в методе connect
     # https://stackoverflow.com/questions/18836291/lambda-function-returning-false
     '''
     #widget.__dict__[s[1]].clicked.connect(lambda: print(s[1]))
@@ -120,6 +121,10 @@ class MainWindow(QMainWindow):
     def setup_ui(self):
         self.developer_tab = DeveloperWidget(self.gui_resources, self.gui_handler)
         self.my_horizontal_layout.addWidget(self.developer_tab, alignment=Qt.AlignVCenter | Qt.AlignHCenter)
+        # не забывать выставлять минимальные значения размера окна в QT дизайнере, иначе при использовании параметра
+        # alignment= в методе .addWidget добавляемый виджет сжимается до минимального размера, который по умолчанию
+        # равен 0, либо переопределять метод .sizeHint() -> QRect()
+
         self.save_position.clicked.connect(lambda: self.save_settings())
 
     def initialize_icons(self):
